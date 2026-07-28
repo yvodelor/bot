@@ -1,0 +1,49 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "nodemon src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@huggingface/transformers": "^4.2.0",
+    "@types/string-similarity": "^4.0.2",
+    "@xenova/transformers": "^2.0.1",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "franc": "^6.2.0",
+    "fuse.js": "^7.5.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.2.0",
+    "pg": "^8.22.0",
+    "pgvector": "^0.3.0",
+    "string-similarity": "^4.0.4",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^26.1.0",
+    "@types/pg": "^8.20.0",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "protobufjs@6.11.6": true,
+    "sharp@0.32.6": true
+  }
+}
