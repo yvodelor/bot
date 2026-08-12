@@ -1,4 +1,5 @@
 import { createCrudApi  } from "../api/crud.api";
+import axiosClient from "./axiosClient";
 
 export type Business = {
   id: string;
@@ -20,4 +21,18 @@ export type Business = {
 };
 
 
-export const businessApi = createCrudApi<Business>('/business');
+const crud = createCrudApi<Business>('/business');
+
+export const businessApi = {
+   
+  
+        ...crud,   
+
+        getPulic:  (id: string) =>
+             axiosClient.get<Business>( `/public/business/${id}`)
+             .then (res => res.data)
+            
+    
+    }
+    
+    

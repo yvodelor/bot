@@ -89,21 +89,24 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
           </button>
 
           <Link to="/" className="lg:hidden">
+            
             <img
-              className="dark:hidden"
-              src=""
-              alt="Logo"
+              src="/logo.png"
+              alt="Sickabot Ai"
+              className="h-10 w-auto dark:hidden"
             />
+            {/*
             <img
               className="hidden dark:block"
               src=""
               alt="Logo"
             />
+            */}
           </Link>
 
           <button
             onClick={toggleApplicationMenu}
-            className="flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
+            className=" lg:hidden block flex items-center justify-center w-10 h-10 text-gray-700 rounded-lg z-99999 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
           >
             <svg
               width="24"
@@ -120,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
               />
             </svg>
           </button>
-
+          {/*
           <div className="hidden lg:block">
             <form action="https://formbold.com/s/unique_form_id" method="POST">
               <div className="relative">
@@ -148,12 +151,13 @@ const Header: React.FC<HeaderProps> = ({ onClick, onToggle }) => {
                 />
 
                 <button className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
-                  <span> ⌘ </span>
+                  
                   <span> Search </span>
                 </button>
               </div>
             </form>
           </div>
+          */}
         </div>
         <div
           className={`${

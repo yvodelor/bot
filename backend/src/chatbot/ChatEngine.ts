@@ -86,7 +86,7 @@ if(!business){
 
 }
 
-
+console.log(business)
 
 if(
     business.admin_status !== "approved"
@@ -319,12 +319,10 @@ if(wordCount(message)<=2){
 
 
 
-    intentId =
-    intent?.id ?? null;
+    intentId = intent?.id ?? null;
 
 
-    scenarioId =
-    intent?.scenario_id ?? null;
+    scenarioId = Number(intent?.scenario_id) ?? null;
 
 
 }
@@ -352,7 +350,7 @@ const result =
 await pool.query(
 `
 SELECT 
-scenario_id,
+
 intent_id,
 1-(embedding <=> $1::vector)
 AS similarity

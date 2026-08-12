@@ -79,6 +79,12 @@ const  IntentCols:  Column<Intent>[] = [
   },
 
   {
+    key: 'groupe_id',
+    header: 'Groupe',
+    sortable: true,
+  },
+
+  {
     key: 'activite_id',
     header: 'Activite',
     sortable: true,

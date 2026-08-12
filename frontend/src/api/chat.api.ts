@@ -9,14 +9,13 @@ export interface ChatMessage{
     id: string;
     role: ChatRole;
     text:string;
-    image_url?: string;
+    image?: string;
     createdAt: string;
 }
 export interface ChatResponse {
     text: string,
-    image_url?: string;
-    sessionId: string,
-    
+    image?: string;
+    sessionId: string,    
 }
 
 export type ChatRequest = {

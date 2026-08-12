@@ -14,11 +14,15 @@ const ChatPage = () => {
   // Etape 1: On resilve slug -> BusinessId
   
   useEffect(() =>{
-    axiosClient.get(`/business/by?field=slug&value=${slugBusiness}`)
-      .then(res => setBusiness(res.data.data[0]))
+    axiosClient.get(`/public/business/by?field=slug&value=${slugBusiness}`)
+      .then(res => setBusiness(res.data.data))
       .catch(() => setBusiness(null))
       .finally(() => setLoading(false));
   }, [slugBusiness]);
+
+    
+
+  console.log(business)
 
   if(loading) return <div className = "h-screen grid place-items-center"> Chargement...</div>;
   if(!business) return <div className = "h-screen grid place-items-center"> Structure Introuvale</div>;
@@ -27,13 +31,14 @@ const ChatPage = () => {
     <> 
       <PageMeta
         title= {`${business.name}`}
-        description={`Thatcher avec ${business.name}`}
+        description={`Thatcher avec ${business.description}`}
       />
 
       <div className="h-screen w-screen bg-gray-50">
         <ChatWidget
           tenantId= {business.id}
           title={business.name}
+          description={business.description}
           mode='fullscreen'
         />
       </div>

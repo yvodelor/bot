@@ -69,7 +69,7 @@ export default function BusinessCreate() {
       activite_id: value
     }));   
   };
-
+  
   const navigate = useNavigate();
 
 

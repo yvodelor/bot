@@ -24,9 +24,14 @@ console.log('api-pl', apiUrl);
         {/* Navbar */}
         <nav className="sticky top-0 bg-white shadow-sm z-50">
           <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-indigo-600">
-              ConversaAI
-            </h1>
+            <div className="flex items-center gap-2">
+              <img
+                src="/logo.png"
+                alt="ConversaAI"
+                className="h-10 w-auto"
+              />
+              
+            </div>
 
             <ul className="hidden md:flex items-center gap-8 font-medium">
               <li>
@@ -152,33 +157,103 @@ console.log('api-pl', apiUrl);
         </section>
 
         {/* Prix */}
-        <section id="prix" className="py-20">
-          <div className="max-w-6xl mx-auto px-6">
-            <h3 className="text-4xl font-bold text-center mb-12">
-              Tarifs simples
-            </h3>
+        {/* Prix */}
+<section id="prix" className="py-20 bg-gray-50">
+  <div className="max-w-7xl mx-auto px-6">
+    <h3 className="text-4xl font-bold text-center mb-12">
+      Choisissez votre forfait
+    </h3>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="border rounded-xl p-8">
-                <h4 className="text-2xl font-bold">Starter</h4>
-                <p className="text-5xl font-bold my-6">15€</p>
-                <p className="text-gray-500">par mois</p>
-              </div>
+    <div className="grid md:grid-cols-3 gap-8">
 
-              <div className="bg-indigo-600 text-white rounded-xl p-8 shadow-xl">
-                <h4 className="text-2xl font-bold">Pro</h4>
-                <p className="text-5xl font-bold my-6">49€</p>
-                <p>par mois</p>
-              </div>
+      {/* Starter */}
+      <div className="border rounded-xl p-8 bg-white">
+        <h4 className="text-2xl font-bold">Starter</h4>
 
-              <div className="border rounded-xl p-8">
-                <h4 className="text-2xl font-bold">Entreprise</h4>
-                <p className="text-5xl font-bold my-6">99€</p>
-                <p className="text-gray-500">par mois</p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <p className="text-5xl font-bold my-4">
+          15€
+          <span className="text-lg font-normal text-gray-500">/mois</span>
+        </p>
+
+        <ul className="space-y-3 mt-8 text-gray-700">
+          <li>✅ 2 000 messages/mois</li>
+          <li>✅ 1 chatbot</li>
+          <li>✅ Réponse standard</li>
+          <li>✅ FAQ illimitée</li>
+          <li>✅ 10 scénarios</li>
+          <li>✅ Widget Web</li>
+          <li>❌ WhatsApp</li>
+          <li>❌ Telegram</li>
+          <li>❌ API</li>
+          <li>Support par email</li>
+        </ul>
+
+        <button className="w-full mt-8 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700">
+          Commencer
+        </button>
+      </div>
+
+      {/* Pro */}
+      <div className="rounded-xl p-8 bg-indigo-600 text-white shadow-2xl scale-105">
+        <span className="bg-yellow-400 text-black text-xs px-3 py-1 rounded-full">
+          Le plus populaire
+        </span>
+
+        <h4 className="text-2xl font-bold mt-4">Pro</h4>
+
+        <p className="text-5xl font-bold my-4">
+          49€
+          <span className="text-lg font-normal">/mois</span>
+        </p>
+
+        <ul className="space-y-3 mt-8">
+          <li>✅ 20 000 messages/mois</li>
+          <li>✅ 5 chatbots</li>
+          <li>✅ Réponse rapide</li>
+          <li>✅ FAQ illimitée</li>
+          <li>✅ Scénarios illimités</li>
+          <li>✅ Widget Web</li>
+          <li>✅ Telegram</li>
+          <li>✅ WhatsApp</li>
+          <li>✅ API REST</li>
+          <li>Support prioritaire</li>
+        </ul>
+
+        <button className="w-full mt-8 bg-white text-indigo-600 py-3 rounded-lg font-semibold hover:bg-gray-100">
+          Choisir Pro
+        </button>
+      </div>
+
+      {/* Entreprise */}
+      <div className="border rounded-xl p-8 bg-white">
+        <h4 className="text-2xl font-bold">Entreprise</h4>
+
+        <p className="text-5xl font-bold my-4">
+          99€
+          <span className="text-lg font-normal text-gray-500">/mois</span>
+        </p>
+
+        <ul className="space-y-3 mt-8 text-gray-700">
+          <li>✅ Messages illimités</li>
+          <li>✅ Chatbots illimités</li>
+          <li>✅ Réponse ultra rapide</li>
+          <li>✅ IA avancée</li>
+          <li>✅ Scénarios illimités</li>
+          <li>✅ Toutes les intégrations</li>
+          <li>✅ API complète</li>
+          <li>✅ Hébergement dédié</li>
+          <li>✅ Tableau de bord avancé</li>
+          <li>✅ Support 24/7</li>
+        </ul>
+
+        <button className="w-full mt-8 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700">
+          Nous contacter
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
 
         {/* About */}
         <section id="about" className="bg-gray-50 py-20">

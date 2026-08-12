@@ -1,22 +1,20 @@
-import {
-    extraireData,
-    type FieldSchema
-} from "../utils/extraireData";
+
+import { extraireData, type FieldSchema } from "../utils/extraireData";
 
 
 
 export interface ExtractionResult {
-
     data: Record<string, any>;
-
     success:boolean;
+    missing?: string[];
 
 }
 
 
 
-export class ExtractionService {
 
+
+export class ExtractionService {
 
 
     /**
@@ -25,27 +23,22 @@ export class ExtractionService {
     static async extract(
         message:string,
         schema:FieldSchema[],
-        tenantData:any
+        tenantData:any,
+        tenantId: number
     ):Promise<ExtractionResult>{
 
 
 
-        const data =
-        extraireData(
+        const data =  extraireData(
             message,
             schema,
-            tenantData
+            tenantData,
+            tenantId
         );
 
-
-
         return {
-
             data,
-
-            success:
-                Object.keys(data).length > 0
-
+            success: Object.keys(data).length > 0
         };
 
     }
@@ -53,31 +46,26 @@ export class ExtractionService {
 
 
 
-
     /**
      * Schéma commande produit
      */
-    static getOrderSchema()
-    :FieldSchema[]{
-
+    static getOrderSchema(): FieldSchema[] {
 
         return [
 
             {
                 champ:"produit",
                 type:"entity",
-                source:"produits",
-                keys:[
-                    "name"
-                ]
+                config:{
+                    source:"produits",
+                    keys:["name"]
+                }
             },
-
 
             {
                 champ:"quantite",
                 type:"number"
             },
-
 
             {
                 champ:"date",
@@ -85,7 +73,6 @@ export class ExtractionService {
             }
 
         ];
-
     }
 
 
@@ -97,18 +84,17 @@ export class ExtractionService {
      */
     static async extractOrder(
         message:string,
-        tenantData:any
+        tenantData:any,
+        tenantId: number
     ){
 
 
         return this.extract(
 
             message,
-
             this.getOrderSchema(),
-
-            tenantData
-
+            tenantData,
+            tenantId
         );
 
     }
@@ -120,8 +106,7 @@ export class ExtractionService {
     /**
      * Extraction contact client
      */
-    static getContactSchema()
-    :FieldSchema[]{
+    static getContactSchema()  :FieldSchema[]{
 
 
         return [
@@ -152,17 +137,16 @@ export class ExtractionService {
 
     static async extractContact(
         message:string,
-        tenantData:any={}
+        tenantData:any={},
+        tenantId: number
     ){
 
 
         return this.extract(
-
             message,
-
             this.getContactSchema(),
-
-            tenantData
+            tenantData,
+            tenantId
 
         );
 

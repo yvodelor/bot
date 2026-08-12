@@ -16,7 +16,7 @@ import TextArea from "../../../components/form/input/TextArea.tsx";
 import Inputfield from "../../../components/form/input/InputField.tsx";
 import Radio from "../../../components/form/input/Radio2.tsx";
 
-import { getFaqDefault } from "../../../api/faqDefault.api.ts";
+import { getFaqDefault } from "../../../api/faq.api.ts";
 import { getFaqClient, getFaqClientById,  getFaqClientByBusinessId, createFaqClient, updateFaqClient } from "../../../api/faqClient.api.ts";
 import Button from "../../../components/button/Button.tsx";
 

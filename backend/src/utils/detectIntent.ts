@@ -5,6 +5,7 @@ export type IntentRule = {
     nom: string;
     keywords: string;
     scenario_id: string;
+    groupe_id?: string;
 };
 
 

@@ -19,7 +19,8 @@ type validationFn = (data: any) =>  string | null;
 
 export const  createBaseController = <T extends { id: number}>(
     service: CrudService<T>,
-    validators?: { create?: validationFn, update?: validationFn}
+    validators?: { create?: validationFn, update?: validationFn},
+    publicMode = false
 
 ) => {
 
@@ -29,10 +30,12 @@ export const  createBaseController = <T extends { id: number}>(
         return {
             user: req.user,
             userId: req.user?.sub,
-            enableAccess
+            enableAccess: publicMode ? false : enableAccess
         };
     };
 
+
+    
     return {
         getAll: async(req: Request, res: Response, next: NextFunction) =>{
     
@@ -73,12 +76,27 @@ export const  createBaseController = <T extends { id: number}>(
         create: async(req: Request, res: Response, next: NextFunction) =>{
             try{
               
-                
+                console.log("BODY", req.body);
+                console.log("FILE", req.file);
+                console.log("FILES", req.files);
+
                 if(validators?.create){
                     const err = validators.create(req.body)
                     if(err) return res.status(400).json({ success: false, error: err})
                 }
-                const item = await service.create(req.body, getContext(req))
+                const payload = {
+                    ...req.body,
+                    ...(req.file && {
+                        image: req.file.filename
+                    })
+                };
+
+                const item = await service.create(
+                    payload,
+                    getContext(req)
+                );
+
+
                 res.status(200).json({sucess: true, data: item})
             } catch(e){
                 next(e)

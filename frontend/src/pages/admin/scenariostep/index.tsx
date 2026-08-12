@@ -34,7 +34,7 @@ const ScenarioStep = () => {
         console.log(rep);
         setScenarios(rep.data)
       }catch(error){
-        console.log('Erreur');
+        console.log('Erreur', error);
       } finally{
         setLoading(false)
       }
@@ -51,8 +51,9 @@ const ScenarioStep = () => {
   },
 
   {
-    key: 'ordre',
+    key: 'step_order',
     header: 'Ordre',
+    sortable: true,
   },
 
   {
@@ -68,6 +69,10 @@ const ScenarioStep = () => {
   {
     key: 'variable',
     header: 'Variable',
+  },
+  {
+    key: 'config',
+    header: 'Config.',
   },
 
 ];

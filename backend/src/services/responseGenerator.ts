@@ -72,8 +72,8 @@ const {
 }=ctx;
 
 
-
-let responseText = "Veuillez reformuler votre demande";
+console.log('context', ctx)
+let responseText = "Veuillez reformuler votre demand";
 
 
 
@@ -148,46 +148,38 @@ case 8:
 
 
 
-// =================================
-// Répéter dernière réponse
-// =================================
+    // =================================
+    // Répéter dernière réponse
+    // =================================
 
-case 11:
-{
-
-
-responseText =
-lastBot?.message
-??
-"Je n'ai pas encore de réponse précédente.";
-
-
-break;
-
-
-}
-
-
-
-
-
-
-
-// =================================
-// Catalogue produit
-// =================================
-
-case 61:
-{
-
-    if(ctx.produits.length===0){
-        responseText = "Aucun produit disponible pour {business_name}";
+    case 11:
+    {
+        responseText = lastBot?.message ?? "Je n'ai pas encore de réponse précédente.";
         break;
+
     }
 
-    responseText = tableauProduits;
-    break;
-}
+
+
+
+
+
+
+// =================================
+    // Catalogue produit
+    // =================================
+
+    case 61:
+    {
+
+        if(ctx.produits.length===0){
+            responseText = "Aucun produit disponible pour {business_name}";
+            break;
+        }
+
+        responseText = tableauProduits;
+        break;
+    }
 
 
 

@@ -1,48 +1,38 @@
 import { pool } from "../config/db";
+import { extractProduit } from "../chatbot/entityService";
 
-import { ChatSessionService } 
-from "./chatSessionService";
+import { ChatSessionService }  from "./chatSessionService";
 
-import { ChatMessageService } 
-from "./chatMessageService";
+import { ChatMessageService } from "./chatMessageService";
 
-import { ChatChannelService } 
-from "./chatChannelService";
+import { ChatChannelService } from "./chatChannelService";
 
-import { intentService } 
-from "./intentService";
+import { intentService } from "./intentService";
+import { ChatFaqService } from "./chatFaqService";
 
-import { responseService } 
-from "./responseService";
+import { responseService } from "./responseService";
 
-import { ScenarioManager } 
-from "./scenarioManager";
+import { ScenarioManager } from "./scenarioManager";
 
-import { businessService } 
-from "./businessService";
+import { businessService } from "./businessService";
 
+import { normalizeText } from "../utils/normalizeText";
 
-import { normalizeText } 
-from "../utils/normalizeText";
+import { detectIntent } from "../utils/detectIntent";
 
-import { detectIntent } 
-from "../utils/detectIntent";
-
-import { createEmbedding } 
-from "../utils/embedding";
-
-import { extraireData, extraireTopic, type FieldSchema }
-from "../utils/extraireData";
+import { createEmbedding } from "../utils/embedding";
 
 
-import {
-    wordCount,
-    pickRandom,
-    replacePlaceholders,
-    formatListeProduits,
-    formatTableauProduits
+import { IntentResponseService } from "./intentResponseService";
 
+import {  wordCount, replacePlaceholders, formatListeProduits, formatTableauProduits
 } from "../utils/fonctions";
+
+import { ChatUnknownService }  from "./chatUnknownService";
+
+
+
+
 
 
 
@@ -71,12 +61,11 @@ const {
 // =================================================
 
 
-const business =
-await businessService.getById(
+const business = await businessService.getById(
     tenantId
 );
 
-
+console.log(business)
 
 if(!business){
 
@@ -86,13 +75,7 @@ if(!business){
 
 }
 
-console.log(business)
-
-if(
-    business.admin_status !== "approved"
-    ||
-    business.user_status !== "active"
-){
+if(  business.admin_status !== "approved" ||   business.user_status !== "active" ){
 
     return {
         text:"Agent IA inactif"
@@ -105,13 +88,10 @@ if(
 if(business.agent_msg <=0){
 
     return {
-        text:
-        "Je ne peux pas répondre pour le moment."
+        text: "Je ne peux pas répondre pour le moment."
     };
 
 }
-
-
 
 
 // =================================================
@@ -119,8 +99,7 @@ if(business.agent_msg <=0){
 // =================================================
 
 
-const resultProd =
-await pool.query(
+const resultProd = await pool.query(
 `
 SELECT *
 FROM produit
@@ -133,33 +112,9 @@ tenantId
 );
 
 
-const produits =
-resultProd.rows;
-
-
-
-const listeProduits =
-formatListeProduits(
-    produits
-);
-
-
-
-const tableauProduits =
-formatTableauProduits(
-    produits
-);
-
-
-
-
-
-const tenantData = {
-
-    produits
-
-};
-
+const produits = resultProd.rows;
+const listeProduits = formatListeProduits( produits);
+const tableauProduits = formatListeProduits(produits);
 
 
 
@@ -168,230 +123,253 @@ const tenantData = {
 // 3 - CHANNEL
 // =================================================
 
-
-const channel =
-await ChatChannelService.getByCode(
-    "web"
-);
-
-
-
+const channel = await ChatChannelService.getByCode( "web");
 if(!channel){
-
     throw new Error(
         "Canal introuvable"
     );
-
 }
 
 
 
+//======================= Debut =================================
 
+let responseText = "Veuillez reformuler votre demande";
+let responseImage = "";
+let intentId:number|null=null;
+let scenarioId:number|null=null;
+let intentGroupeId:number|null=null;
+let produitDetecte = null;
+let intentNom: string | null = null;
+
+
+const intents = await intentService.getAll();
+
+// =================================================
+// 9 - DETECTION INTENT
+// =================================================
+
+if(wordCount(message)<=2){
+
+    const intent = detectIntent( 
+        normalizeText(message),
+        intents
+    );
+
+    intentId = intent?.id ?? null;
+    intentNom = intent?.nom ?? null;
+    scenarioId = Number(intent?.scenario_id) ?? null;
+    intentGroupeId = Number(intent?.groupe_id) ?? null
+
+}
+
+// =================================================
+// 10 - EMBEDDING INTENT
+// =================================================
+
+if(!intentId){
+
+    const embedding =
+    await createEmbedding(
+        message
+    );
+
+
+
+    const result =await pool.query(
+    `
+    SELECT
+        ie.intent_id,
+        i.scenario_id, i.nom,
+        i.groupe_id,
+        1-(ie.embedding <=> $1::vector) AS similarity
+    FROM intent_exemple ie
+    JOIN intent i
+    ON i.id = ie.intent_id
+    WHERE 1-(ie.embedding <=> $1::vector) >= 0.70
+    ORDER BY ie.embedding <=> $1::vector
+    LIMIT 1
+
+    `,
+    [
+    JSON.stringify(embedding)
+    ]
+    );
+
+    const intentResult = result.rows[0];
+
+    intentId = intentResult?.intent_id ?? null;
+    intentNom = intentResult?.nom ?? null;
+    scenarioId = intentResult?.scenario_id ?? null;
+    intentGroupeId = intentResult?.groupe_id ?? null;
+
+}
+
+
+console.log('intent', intentId)
+console.log('intentGroupeId', intentGroupeId)
+
+//=================================================
+// PRODUIT
+// =================================================
+
+if (intentId) {
+
+    const intent = intents.find(
+        (i: any) => i.id === intentId
+    );
+
+    if (
+        intent?.nom === "search_produit" ||
+        intent?.nom === "price_produit" ||
+        intent?.nom === "availability_produit"
+    ) {
+
+        produitDetecte = extractProduit(
+            message,
+            tenantId
+        );
+
+        console.log(
+            "[ChatEngine] Produit détecté :",
+            produitDetecte
+        );
+    }
+}
+console.log(produitDetecte)
+
+
+
+
+const produitContext = produitDetecte
+    ? {
+        id: produitDetecte.id ?? null,
+        nom: produitDetecte.nom ?? null,
+        source: produitDetecte.source,
+        score: produitDetecte.score
+    }
+    : null;
+
+const tenantData = {
+    produit: produitContext  
+};
 
 // =================================================
 // 4 - SESSION
 // =================================================
-
-
-const session =
-await ChatSessionService.getOrCreate(
+const session = await ChatSessionService.getOrCreate(
     sessionId,
     tenantId,
     channel.id
 );
 
 
+// current session
+const currentSessionId = session.id;
 
-const currentSessionId =
-session.id;
-
-
+console.log('session', session)
 
 
 // =================================================
 // 5 - HISTORIQUE
 // =================================================
 
-
-const lastBot =
-await ChatMessageService.getLastMessage(
-    currentSessionId
-);
-
-
-
+const lastBot = await ChatMessageService.getLastMessage( currentSessionId );
 
 // =================================================
 // 6 - MESSAGE USER
 // =================================================
-
-
-await ChatMessageService.create(
-    currentSessionId,
+await ChatMessageService.create( currentSessionId,
     "user",
     message
 );
 
 
-
-
-
 // =================================================
 // 7 - VARIABLES SESSION
 // =================================================
-
-
-const variables =
-session.variables ?? {};
-
-
-
-
-
-let responseText =
-"Veuillez reformuler votre demande";
-
-
-
-let intentId:number|null=null;
-
-let scenarioId:number|null=null;
-
-
-
+const variables = session.variables ?? {};
 
 
 // =================================================
 // 8 - SCENARIO ACTIF
 // =================================================
+if(ScenarioManager.hasScenario(session)){
+ 
+    if(intentId !== null ){
+        const scenarioIntent = await ScenarioManager.getScenarioIntent(
+            session.scenario_id,
+            intentId
+        );   
+
+        console.log(scenarioIntent)
+        if(scenarioIntent){
+
+            switch(scenarioIntent.action){
+                case "continue":
+                    const scenarioResult =  await ScenarioManager.handle(
+                        session,
+                        message,
+                        tenantData
+                    );
+
+                    return {
+                        text: scenarioResult.text,
+                        sessionId: currentSessionId,
+                        scenario:true
+                    };                   
+
+                case "ignored":
+                    break;
 
 
-if(
-    ScenarioManager.hasScenario(session)
-){
+                case "cancel":
+                    await ScenarioManager.annuler(  currentSessionId );
+                    break;
+            }
 
+        }
+    }
+    else{
 
-    const scenarioResult =
-    await ScenarioManager.handle(
-        session,
-        message
-    );
+        // Intent non prévu dans ce scénario
+        const scenarioGroupeId =
+            await ScenarioManager.getGroupeScenario(
+                session.scenario_id
+            );
+        
+        if(
+            intentGroupeId &&
+            intentGroupeId !== scenarioGroupeId
+        ){
 
+            await ScenarioManager.annuler(
+                currentSessionId
+            );
 
+        }
+        
 
+        const scenarioResult = await ScenarioManager.handle(
+            session,
+            message,
+            tenantData
+        );
+
+        return {
+            text: scenarioResult.text,
+            sessionId: currentSessionId,
+            scenario:true
+        };
+    }
+    /*
     return {
-
-        text:
-        scenarioResult.text,
-
-        sessionId:
-        currentSessionId,
-
+        text: scenarioResult.text,
+        sessionId: currentSessionId,
         scenario:true
-
     };
-
-
+    */
 }
-
-
-
-
-
-// =================================================
-// 9 - DETECTION INTENT
-// =================================================
-
-
-const intents =
-await intentService.getAll();
-
-
-
-if(wordCount(message)<=2){
-
-
-    const intent =
-    detectIntent(
-        normalizeText(message),
-        intents
-    );
-
-
-
-    intentId = intent?.id ?? null;
-
-
-    scenarioId = Number(intent?.scenario_id) ?? null;
-
-
-}
-
-
-
-
-
-// =================================================
-// 10 - EMBEDDING INTENT
-// =================================================
-
-
-if(!intentId){
-
-
-const embedding =
-await createEmbedding(
-    message
-);
-
-
-
-const result =
-await pool.query(
-`
-SELECT 
-
-intent_id,
-1-(embedding <=> $1::vector)
-AS similarity
-
-FROM intent_exemple
-
-WHERE 
-1-(embedding <=> $1::vector)>=0.80
-
-ORDER BY 
-embedding <=> $1::vector
-
-LIMIT 1
-
-`,
-[
-JSON.stringify(embedding)
-]
-);
-
-
-
-const intentResult =
-result.rows[0];
-
-
-
-intentId =
-intentResult?.intent_id ?? null;
-
-
-scenarioId =
-intentResult?.scenario_id ?? null;
-
-
-}
-
-
-
-
-
 
 
 // =================================================
@@ -400,39 +378,16 @@ intentResult?.scenario_id ?? null;
 
 
 const businessVariables={
-
-
-business_name:
-business.name,
-
-
-business_phone:
-business.phone,
-
-
-business_email:
-business.email,
-
-
-business_address:
-business.address,
-
-
-business_horaire:
-business.horaire,
-
-
-bot_name:
-business.agent_name,
-
-
-listeProduits,
-
-
-tableauProduits,
-
-
-...variables
+    business_name: business.name,
+    business_phone: business.phone,
+    business_email: business.email,
+    business_address: business.address,
+    business_horaire: business.horaire,
+    bot_name: business.agent_name,
+    business_description: business.description,
+    listeProduits,
+    tableauProduits,
+    ...variables
 
 };
 
@@ -446,151 +401,17 @@ tableauProduits,
 // 12 - TRAITEMENT INTENT
 // =================================================
 
-
-const responseBases =
-await responseService.getAll();
+let faq = null;
 
 
+if(!scenarioId){
 
-
-if(intentId){
-
-
-switch(intentId){
-
-
-
-case 8:
-{
-
-const schema:FieldSchema[]=[
-
-{
-champ:"produit",
-type:"entity",
-source:"produits",
-keys:["name"]
-},
-
-{
-champ:"quantite",
-type:"number"
-},
-
-{
-champ:"date",
-type:"date"
-}
-
-];
-
-
-
-const extracted =
-extraireData(
-message,
-schema,
-tenantData
-);
-
-
-
-variables.quantite =
-extracted.quantite;
-
-
-
-await ChatSessionService.setVariable(
-currentSessionId,
-"quantite",
-extracted.quantite
-);
-
-
-
-const topic =
-extraireTopic(
-message,
-[
-"je veux",
-"je cherche",
-"commander",
-"acheter"
-]
-);
-
-
-
-console.log(
-"topic",
-topic
-);
-
-
-
-responseText =
-"Quel produit souhaitez-vous ?";
-
-
-
-break;
+    faq = await ChatFaqService.search(
+        tenantId,
+        message
+    );
 
 }
-
-
-
-
-case 11:
-
-{
-
-responseText =
-lastBot?.message
-??
-"Je n'ai pas de message précédent";
-
-
-break;
-
-}
-
-
-
-
-default:
-{
-
-const responses =
-responseBases.filter(
-r=>r.intent_id==String(intentId)
-);
-
-
-
-const response =
-pickRandom(
-responses
-);
-
-
-
-responseText =
-response?.response
-??
-responseText;
-
-
-}
-
-
-}
-
-
-
-}
-
-
-
 
 
 // =================================================
@@ -598,20 +419,72 @@ responseText;
 // =================================================
 
 
-if(scenarioId){
+if (scenarioId) {
 
+    const scenarioResult =
+        await ScenarioManager.start(
+            currentSessionId,
+            scenarioId
+        );
 
-await ScenarioManager.start(
-    currentSessionId,
-    scenarioId
-);
+    const text =
+        scenarioResult?.text
+        ?? "Démarrage du scénario";
 
+    await ChatMessageService.create(
+        currentSessionId,
+        "bot",
+        text
+    );
 
+    return {
+        text,
+        sessionId: currentSessionId,
+        scenario: true
+    };
 }
 
 
 
+if(faq){
+    responseText = faq.answer;
+}
+else  if (intentId !== null && intentNom !== null) {
+    console.log('intentnom', intentNom)
+    const intentResponse = await IntentResponseService.getResponse({
 
+        tenantId,
+        activiteId: business.activite_id ?? null,
+        intentId,
+        sessionId:currentSessionId,
+        variables,
+        intentNom,
+        businessVariables
+
+    });
+
+
+    responseText = intentResponse.text;
+}
+
+
+
+console.log('unknown', faq, intentId)
+if (
+    !faq &&
+    intentId === null
+) {
+
+    await ChatUnknownService.create(
+        tenantId,
+        currentSessionId,
+        message,
+        channel.id
+    );
+
+    responseText =
+        "Veuillez reformuler votre demande";
+}
 
 
 // =================================================
@@ -619,11 +492,10 @@ await ScenarioManager.start(
 // =================================================
 
 
-responseText =
-replacePlaceholders(
-responseText,
-variables,
-businessVariables
+responseText = replacePlaceholders(
+    responseText,
+    variables,
+    businessVariables
 );
 
 
@@ -638,8 +510,8 @@ businessVariables
 
 
 await ChatSessionService.updateIntent(
-currentSessionId,
-intentId
+    currentSessionId,
+    intentId
 );
 
 
@@ -654,9 +526,9 @@ intentId
 
 
 await ChatMessageService.create(
-currentSessionId,
-"bot",
-responseText
+    currentSessionId,
+    "bot",
+    responseText
 );
 
 
@@ -706,20 +578,20 @@ tenantId
 
 
 
-return {
+    return {
 
-text:responseText,
+        text:responseText,
+        image: responseImage,
 
-sessionId:currentSessionId,
+        sessionId:currentSessionId,
 
-intentId
+        intentId
 
-};
+    };
 
 
 
 }
-
 
 
 }

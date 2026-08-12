@@ -17,6 +17,9 @@ type Options = {
   protectedRoutes?: RouteName[];
   disabledRoutes?: RouteName[];
   upload?: RequestHandler;
+  customRoutes?: (router: Router) => void;
+
+   publicAccess?: boolean;
 };
 
 
@@ -28,9 +31,10 @@ type Controller = {
     create?:RequestHandler
     update?:RequestHandler
     delete?:RequestHandler
+
 }
 
-const noAuth: RequestHandler = (req, res, next) =>  next()
+
 
 export const createCrudRoutes = <T extends { id: number}>(
     controller: Controller,
@@ -38,6 +42,15 @@ export const createCrudRoutes = <T extends { id: number}>(
 ) =>{
     const router = Router()
     const {protectedRoutes = [], disabledRoutes = []} = options
+
+        const noAuth: RequestHandler = (req, res, next) => {
+
+        req.queryContext = {
+            enableAccess: false
+        };
+
+        next();
+    };
     
     const guard = (route: string): RequestHandler => {
         const isProtected = protectedRoutes?.includes(route as any) ?? false;
@@ -45,6 +58,11 @@ export const createCrudRoutes = <T extends { id: number}>(
     };
 
     const isEnabled = (route: string) => !disabledRoutes.includes(route as any)
+
+      // Routes personnalisées
+    if(options.customRoutes){
+        options.customRoutes(router);
+    }
 
 
     // Routes de lecture - publiques par default

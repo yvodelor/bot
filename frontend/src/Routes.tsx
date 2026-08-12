@@ -11,6 +11,7 @@ import ScenarioCreate from "./pages/admin/scenario/ScenarioCreate";
 import ScenarioStep from "./pages/admin/scenariostep/";
 import ScenarioStepCreate from "./pages/admin/scenariostep/ScenarioStep";
 
+
 //import ProtectedRoute from "./components/ProtectedRoute";
 
 const HomePage = lazy(() => import("./pages/Home"));
@@ -45,25 +46,26 @@ const AgentCreate = lazy(() => import("./pages/dash/agent/AgentCreate"));
 /* Business */
 const BusinessPage = lazy(() => import("./pages/dash/business/"));
 const BusinessCreate = lazy(() => import("./pages/dash/business/BusinessCreate"));
-const Knowledge = lazy(() => import("./pages/dash/business/Knowledge"));
-
 
 
 /* Product */
 const ProduitPage = lazy(() => import("./pages/dash/produit"));
 const ProduitCreate = lazy(() => import("./pages/dash/produit/ProduitCreate"));
 
-const FaqCustomtPage = lazy(() =>import("./pages/dash/faqcustom") );
-const FaqCustom = lazy(() => import("./pages/dash/faqcustom/FaqCustom"));
-
-const FaqDefaultPage = lazy(() =>import("./pages/admin/faqdefault") );
-const FaqDefault = lazy(() => import("./pages/admin/faqdefault/FaqDefault"));
+const Faq = lazy(() =>import("./pages/dash/faq/") );
+const FaqCreate = lazy(() => import("./pages/dash/faq/FaqCreate"));
+  
 
 
 const ResponseBase = lazy(() => import("./pages/admin/responsebase"));
 const ResponseBaseCreate = lazy(() => import( "./pages/admin/responsebase/ResponseBase"));
 
+const Ad = lazy(() => import("./pages/admin/ad"));
+const AdCreate = lazy(() => import("./pages/admin/ad/adCreate"));
 
+/* ScenarioIntent */
+const ScenarioIntent = lazy(() => import("./pages/admin/scenariointent"));
+const ScenarioIntentCreate = lazy(() => import("./pages/admin/scenariointent/ScenarioIntentCreate"));
 
 
 
@@ -96,22 +98,18 @@ const appRoutes = [
   { path: "/business/:id", element: <BusinessCreate /> },
   { path: "/business/bot/:botId", element: <BusinessCreate /> },
 
+
   { path: "/produits", element: <ProduitPage /> },
   { path: "/produit", element: <ProduitCreate /> },
   { path: "/produit/:id", element: <ProduitCreate /> },
 
-  { path: "/faq/business/:businessId", element: <Knowledge /> },
-  { path: "/faq_customs", element: <FaqCustomtPage /> },
-  { path: "/faq_custom", element: <FaqCustom /> },
-  { path: "/faq_custom/business/:businessId", element: <FaqCustom /> },
-  { path: "/faq_custom/:id", element: <FaqCustom /> },
+  { path: "/faqs/", element: <Faq /> },
+  { path: "/faq/", element: <FaqCreate /> },
+  { path: "/faq/:id", element: <FaqCreate /> },
+  { path: "/faq/business/:businessId", element: <FaqCreate /> },
 
 
   // Liens Admin
-  { path: "/admin/faq_defaults/", element: <FaqDefaultPage /> },
-  { path: "/admin/faq_default/", element: <FaqDefault /> },
-  { path: "/admin/faq_default/:id", element: <FaqDefault /> },
-
   { path: "/admin/response_bases/", element: <ResponseBase /> },
   { path: "/admin/response_base", element: <ResponseBaseCreate /> },
   { path: "/admin/response_base/:id", element: <ResponseBaseCreate /> },
@@ -137,6 +135,14 @@ const appRoutes = [
 
   { path: "/admin/scenario_step", element: <ScenarioStepCreate /> },
   { path: "/admin/scenario_step/:id", element: <ScenarioStepCreate /> },
+
+  { path: "/admin/ads", element: <Ad /> },
+  { path: "/admin/ad", element: <AdCreate /> },
+  { path: "/admin/ad/:id", element: <AdCreate /> },
+
+  { path: "/admin/scenario_intents", element: <ScenarioIntent /> },
+  { path: "/admin/scenario_intent", element: <ScenarioIntentCreate /> },
+  { path: "/admin/scenario_intent/:id", element: <ScenarioIntentCreate /> }, 
 
   { path: "/product/business/:businessId", element: <ProduitPage /> },
 

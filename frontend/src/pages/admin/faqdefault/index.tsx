@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { type FaqDefault, faqDefaultApi } from "../../../api/faqDefault.api";
+import { type FaqDefault, faqDefaultApi } from "../../../api/faq.api";
 
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";

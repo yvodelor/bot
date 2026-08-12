@@ -4,6 +4,7 @@ import { useNavigate, Link, useParams } from "react-router-dom";
 
 import {type Scenario, scenarioApi} from "../../../api/scenario.api"
 import {type Activite, activiteApi} from "../../../api/activite.api"
+import {type Groupe, groupeApi} from "../../../api/groupe.api"
 import {type Intent, intentApi} from "../../../api/intent.api"
 
 import DashLayout from "../../../layouts/DashLayout.tsx";
@@ -26,6 +27,7 @@ export default function IntentCreate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activites, setActivites] = useState<Activite[]>([]);
+  const [groupes, setGroupes] = useState<Groupe[]>([]);
   const [intents, setIntents] = useState<Intent[]>([]);
   const navigate = useNavigate();
 
@@ -37,6 +39,14 @@ export default function IntentCreate() {
     setForm((prev) => ({
       ...prev,
       activite_id: value
+    })); 
+  };
+
+  const handleSelectGroupe = (value: string) => {
+    console.log("Selected value:", value);  
+    setForm((prev) => ({
+      ...prev,
+      groupe_id: value === 'null' ? '' : value
     })); 
   };
 
@@ -54,6 +64,7 @@ export default function IntentCreate() {
     intent_id: '',
     name: '',
     description: '',
+    groupe_id: '',
     is_active: true
      
   });
@@ -91,8 +102,33 @@ export default function IntentCreate() {
     };
     fetchIntents();
   }, []);
+
+  //Chargement des intents
+  useEffect(() => {
+    const load = async () => {
+      try{
+        const res = await groupeApi.getAll();
+        console.log("🔥 RESPONSE intents:", res);
+        const data = res.data;
+        setGroupes(data);
+       } catch (err) {
+        console.error("❌ FETCH ERROR:", err);
+        setError("Erreur lors du chargement des les groupe");
+      }
+    };
+    load();
+  }, []);
   
-  const optionActives = activites.map(a => ({ value: a.id, label:a.nom}));
+  const optionActives = [
+    {value: 'null', label: 'Toutes les activites'}, 
+    ...activites.map(a => ({ value: a.id, label:a.nom}))
+  ];
+
+  const optionGroupes = [
+    {value: 'null', label: 'Toutes les groupes'}, 
+    ...groupes.map(a => ({ value: a.id, label:a.name}))
+  ];
+
   const optionIntents = intents.map(a => ({ value: a.id, label:a.nom}));
   
 
@@ -145,7 +181,7 @@ export default function IntentCreate() {
 
             <div className="grid grid-cols-12 gap-4">
 
-                <div className="col-span-12 md:col-span-6">
+                <div className="col-span-12 md:col-span-4">
                   <Label>Type d'activité</Label>
                   <Select
                     name="activite_id"
@@ -156,7 +192,7 @@ export default function IntentCreate() {
                   />
                 </div>
                 
-                <div className="col-span-12 md:col-span-6">
+                <div className="col-span-12 md:col-span-4">
                   <Label>Type Intent</Label>
                   <Select
                     name="intent_id"
@@ -164,6 +200,17 @@ export default function IntentCreate() {
                     placeholder = "Select une activité"
                     onChange={handleSelectIntent}
                     defaultValue= { isEdit ? String(form.intent_id)  : ""}
+                  />
+                </div>
+
+                <div className="col-span-12 md:col-span-4">
+                  <Label>Groupe</Label>
+                  <Select
+                    name="groupe_id"
+                    options = {optionGroupes}
+                    placeholder = "Select un groupe"
+                    onChange={handleSelectGroupe}
+                    defaultValue= { isEdit ? String(form.groupe_id)  : ""}
                   />
                 </div>
 

@@ -10,6 +10,7 @@ type Business = {
     admin_status:string;
     agent_msg: number;
     user_status:string;
+    activite_id: number;
     name: string,
     phone: string,
     wathsapp: string,

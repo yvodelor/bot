@@ -6,6 +6,7 @@ export type Scenario = {
   intent_id: string;
   name:string;
   description: string;
+  groupe_id: string;
   is_active: boolean;
 };
 

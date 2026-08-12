@@ -4,7 +4,7 @@ import { createBaseService } from "./baseService";
 type Intent = {
     id: number;
     nom: string;
-    activite_id: string;
+    activite_id: number;
     keywords: string;
     keywords_en: string;
     priority: string;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { useNavigate, Link, useParams } from "react-router-dom";
 
-import { type FaqDefault, faqDefaultApi } from "../../../api/faqDefault.api";
+import { type FaqDefault, faqDefaultApi } from "../../../api/faq.api.ts";
 import { type Activite, activiteApi } from "../../../api/activite.api";
 import { type Intent, intentApi } from "../../../api/intent.api";
 

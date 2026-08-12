@@ -20,7 +20,7 @@ const  ProduitCols:  Column<Produit>[] = [
  
   {
     key: 'name',
-    header: 'Broduit',
+    header: 'Produit/Service',
     sortable: true,
   },
 
@@ -30,12 +30,20 @@ const  ProduitCols:  Column<Produit>[] = [
     header: 'Statut',
     sortable: true,
   },
+
+   {
+    key: 'image',
+    header: 'Image',
+    render:(_value, row) => (
+      <img src={row.image} />
+   )
+  },
 ];
 
 
 
 const ProduitPage = () => {
-  const [businesses, setBusinesses] = useState<Produit[]>([]);
+  
   const [produits, setProduits] = useState<Produit[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
@@ -106,10 +114,10 @@ const ProduitPage = () => {
     <DashLayout>
       
       <PageMeta
-        title="Liste des Agents IA"
-        description="This is React.js Form Elements  Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        title="Produit et Services"
+        description="Tous vos produits et services"
       />
-      <PageBreadcrumb pageTitle="Agent IA" />
+      <PageBreadcrumb pageTitle="Produit et services" />
 
       <ComponentCard  
         title="Produits/Services"

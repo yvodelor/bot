@@ -68,10 +68,11 @@ export const useChatbot = (tenantId: string) => {
                 id: crypto.randomUUID(),
                 role: "bot",
                 text: data.text,
-                image_url: data.image_url,
+                image: data.image,
                 createdAt: new Date().toISOString()
             };
 
+            console.log('messagebot', botMsg);
 
             setMessages(prev => [...prev, botMsg]);
 

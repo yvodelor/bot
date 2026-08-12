@@ -179,7 +179,7 @@ export const createBaseService = <T extends BaseEntity>(
 
 
         create: async (data: Omit<T, 'id'>, context?: QueryContext): Promise<T> => {
-            console.log('yes')
+            
             const payload = access?.field === "user_id"
             ?{
                 ...data,

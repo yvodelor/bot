@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { type Business, businessApi } from "../../../api/business.api";
-import { Dropdown } from "../../../components/ui/dropdown/Dropdown";
+import { Dropdown } from "../../../components/dropdown/Dropdown";
+import { DropdownItem } from "../../../components/dropdown/DropdownItem";
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 
@@ -20,11 +21,7 @@ import {Edit, Trash2, BookOpen} from 'lucide-react'
 
 const  BusinessCols:  Column<Business>[] = [
  
-  {
-    key: 'name',
-    header: 'Structure',
-    sortable: true,
-  },
+ 
   {
     key: 'name',
     header: 'Agent',
@@ -57,14 +54,8 @@ const BusinessPage = () => {
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
 
-  function toggleDropdown() {
-    setIsOpen(!isOpen);
-  }
-
-  function closeDropdown() {
-    setIsOpen(false);
-  }
 
   /* =========================
      FETCH DATA
@@ -118,9 +109,7 @@ const BusinessPage = () => {
   /* =========================
      LOADING
   ========================= */
-  if (loading) {
-    return <p>⏳ Chargement...</p>;
-  }
+ 
 
   /* =========================
      ERROR
@@ -133,6 +122,22 @@ const BusinessPage = () => {
   /* =========================
      UI
   ========================= */
+
+
+  if (loading) {
+
+    return (
+
+      <DashLayout>
+        <div className="p-6">
+          Chargement du dashboard...
+        </div>
+      </DashLayout>
+
+    );
+
+  }
+
   return (
     <DashLayout>
       
@@ -159,41 +164,94 @@ const BusinessPage = () => {
             columns={ BusinessCols }
             actions={(business) => (
               <>
-              <Dropdown>
-                sddd
-              </Dropdown>
-              
               <div className="flex gap-1 justify-end">
-                {/* Editer */}
-                <Button  size="sm" variant="primary" className="bg-green-600 px-0 py-0">
-                  <Link to = {`/business/${business.id}`}> <div className="flex gap-1 justify-end"><Edit  size="15"/> Editer</div></Link>
-                </Button> 
-                
-                {/* Faq */}
-                <Button  size ="sm" variant="primary"  className="bg-blue-600 px-2">
-                  <Link to = {`/faq/business/${business.id}`}><BookOpen  size="15"/></Link>
-                </Button>
 
-                {/* Produit */}
-                <Button  size ="sm" variant="primary"  className="bg-blue-600 px-2">
-                  <Link to = {`/product/business/${business.id}`}>Prod.</Link>
-                </Button>
+                <div className="relative">
 
-                {/* Canaux */}
-                <Button  size ="sm" variant="primary"  className="bg-blue-600 px-2">
-                  <Link to = {`/faq/business/${business.id}`}>Cannaux</Link>
-                </Button>
+                  {/* Bouton du dropdown */}
+                  <button
+                    className="dropdown-toggle flex items-center gap-2 px-4 py-2 rounded-lg border bg-white"
+                    onClick={() =>
+                      setOpenDropdownId(
+                        openDropdownId === business.id ? null : business.id
+                      )
+                    }
+                  >
+                    ...
+                  </button>
 
-                {/* Parametre */}
-                <Button  size ="sm" variant="primary"  className="bg-blue-600 px-2">
-                  <Link to = {`/faq/business/${business.id}`}>Para.</Link>
-                </Button>
 
-                {/* Suppression */}
-                <Button  size ="sm" variant="primary" onClick={() =>handleDelete(business.id)} className="bg-red-600 px-2">
-                  <Trash2  size="15"/>
-                </Button>
+
+                  {/* Contenu du dropdown */}
+                  <Dropdown
+                    isOpen={openDropdownId === business.id}
+                    onClose={() => setOpenDropdownId(null)}
+                  >
+
+                    <div className="w-52 py-2">
+
+                      <DropdownItem
+                        tag="a"
+                        to= {`/business/${business.id}`}
+                        onItemClick={() => setOpenDropdownId(null)}
+                      >
+                        <div className="flex items-center gap-2">
+                         <Edit  size="15"/> Editer
+                        </div>
+                      </DropdownItem>
+
+                      <DropdownItem
+                        tag="a"
+                        to={`/faq/business/${business.id}`}
+                        onItemClick={() => setOpenDropdownId(null)}
+                      >
+                        <div className="flex items-center gap-2">
+                         <BookOpen  size="15"/> FAQ
+                        </div>
+                      </DropdownItem>
+
+                      <DropdownItem
+                        tag="a"
+                        to={`/faq/business/${business.id}`}
+                        onItemClick={() => setOpenDropdownId(null)}
+                      >
+                        <div className="flex items-center gap-2">
+                          Produits/Services
+                        </div>
+                      </DropdownItem>
+                      <DropdownItem
+                        tag="a"
+                        to={`/faq/business/${business.id}`}
+                        onItemClick={() => setOpenDropdownId(null)}
+                      >
+                        <div className="flex items-center gap-2">
+                          Canaux
+                        </div>
+                      </DropdownItem>
+                      
+
+
+
+                      <DropdownItem
+                        tag="button"
+                        onClick={() => handleDelete(business.id)}
+                        onItemClick={() => setOpenDropdownId(null)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <Trash2 size={15} />
+                          Supprimer
+                        </div>
+                      </DropdownItem>
+
+
+                    </div>
+
+                  </Dropdown>
+
+                </div>
               </div>
+              
+             
               </>
             )}
               

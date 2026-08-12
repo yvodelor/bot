@@ -1,6 +1,6 @@
 import { createCrudRoutes } from "./baseRoute";
-import { faqDefaultController } from "../controllers/faqDefaultController";
+import { faqController } from "../controllers/faqController";
 
-export default createCrudRoutes( faqDefaultController, {
+export default createCrudRoutes( faqController, {
     protectedRoutes: [ 'delete']
 })

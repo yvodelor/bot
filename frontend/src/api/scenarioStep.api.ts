@@ -3,10 +3,11 @@ import { createCrudApi  } from "../api/crud.api";
 export type ScenarioStep = {
   id: number;
   scenario_id: string
-  ordre: string;
+  step_order: string;
   question:string;
   type_champ: string;
   variable: string;
+  config: string
  
   
 };

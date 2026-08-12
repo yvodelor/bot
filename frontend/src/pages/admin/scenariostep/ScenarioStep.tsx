@@ -34,7 +34,8 @@ export default function ScenarioStepCreate() {
     type_champ: '',
     variable: '',
     question: '',
-    ordre: '',
+    step_order: '',
+    config: '{}'
      
   });
 
@@ -67,7 +68,7 @@ export default function ScenarioStepCreate() {
           const data = res.data;
           setScenarios(data);
   
-         } catch (err) {
+        } catch (err) {
           console.error("❌ FETCH ERROR:", err);
           setError("Erreur lors du chargement des scenarios");
         }
@@ -88,10 +89,16 @@ export default function ScenarioStepCreate() {
 
     
     try {
+      const payload = {
+          ...form,
+          config: JSON.parse(form.config)
+      };
+
+
       if(isEdit){
-        await  scenarioStepApi.update((id), form)
-      } else {
-        await  scenarioStepApi.create(form)
+          await scenarioStepApi.update(Number(id), payload);
+      }else{
+          await scenarioStepApi.create(payload);
       }
 
       navigate('/admin/scenario_steps')
@@ -134,10 +141,10 @@ export default function ScenarioStepCreate() {
                 <div className="col-span-12 md:col-span-2">
                   <Label>Ordre</Label>
                   <Inputfield
-                    name="ordre"
+                    name="step_order"
                     placeholder="Ordre"
-                    value={form.ordre}
-                    onChange={(e) => setForm({ ...form, ordre: e.target.value })}
+                    value={form.step_order}
+                    onChange={(e) => setForm({ ...form, step_order: e.target.value })}
                   />
                 </div>
 
@@ -148,6 +155,15 @@ export default function ScenarioStepCreate() {
                     placeholder="Champ"
                     value={form.type_champ}
                     onChange={(e) => setForm({ ...form, type_champ: e.target.value })}
+                  />
+                </div>
+                <div className="col-span-12 md:col-span-6">
+                  <Label>Config</Label>
+                  <Inputfield
+                    name="config"
+                    placeholder="{}"
+                    value={form.config}
+                    onChange={(e) => setForm({ ...form, config: e.target.value })}
                   />
                 </div>
 

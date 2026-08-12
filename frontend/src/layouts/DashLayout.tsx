@@ -5,6 +5,8 @@ import { ThemeProvider } from "../context/ThemeContext";
 import { useAuth } from "../context/authContext";
 import  { useState } from "react";
 
+
+
 import {
   LayoutDashboard,
   Users,
@@ -46,24 +48,17 @@ const menuItems: MenuItem[] = [
   },
 
   {
-    title: "Cannaux",
+    title: "Canaux",
     icon: Users,
     submenu: [
-      { title: "Pages Facebook", link: "#", icon:LayoutDashboard},
-      { title: "Wathsapp Business", link: "#", icon:LayoutDashboard},
-      { title: "Instangram", link: "#", icon:LayoutDashboard},
-      { title: "telegram", link: "#", icon:LayoutDashboard},
+      { title: "Pages Facebook", link: "#"},
+      { title: "Wathsapp Business", link: "#"},
+      { title: "Instangram", link: "#"},
+      { title: "telegram", link: "#"},
     ],
   },
 
-  {
-    title: "Utilisateurs",
-    icon: Users,
-    submenu: [
-      { title: "Liste des utilisateurs", link: "#" },
-      { title: "Ajouter un utilisateur", link: "#" },
-    ],
-  },
+
 
   {
     title: "Rapports",
@@ -87,11 +82,16 @@ const menuItems: MenuItem[] = [
     submenu: [
       { title: "Activites", link: "/admin/activites" },
       { title: "Intents", link: "/admin/intents" },
+      { title: "Groupes", link: "/admin/groupes" },
       { title: "Variants d'intents", link: "/admin/intent/exemples" },
       
       { title: "Response base", link: "/admin/response_bases" },
       { title: "Scenario", link: "/admin/scenarios" },
       { title: "Scenario_step", link: "/admin/scenario_steps" },
+
+      { title: "Scenario_intent", link: "/admin/scenario_intents" },
+      { title: "Ads", link: "/admin/ads" },
+  
       
     ],
   },
@@ -151,7 +151,11 @@ export default function DashLayout({ children }: LayoutProps) {
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-800">
 
           <div className="text-lg text-center font-bold">
-            <a  href= "/">Mon Admin</a>
+            <a  href= "/">  <img
+              src="/logo.png"
+              alt="ConversaAI"
+              className="h-15 w-auto dark:hidden"
+            /></a>
           </div>
 
           {/* Close mobile */}
@@ -168,7 +172,7 @@ export default function DashLayout({ children }: LayoutProps) {
         <nav className="h-[calc(100%-64px)] overflow-y-auto p-4 space-y-2">
 
           {menuItems
-            .filter(item => !item.minRole || role < item.minRole)
+            .filter(item => !item.minRole || role >= item.minRole)
             .map((item, index) => {
             const Icon = item.icon;
 

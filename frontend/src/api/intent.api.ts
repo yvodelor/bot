@@ -6,7 +6,9 @@ export type Intent = {
   lang: string;
   keywords: string,
   keywords_en: string,
-  activite_id: string,
+  activite_id: string | null,
+  scenario_id: string | null,
+  groupe_id: string | null,
   priority: string
 };
 

@@ -13,7 +13,7 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import ComponentCard from "../../../components/common/ComponentCard";
 import Label from "../../../components/form/Label.tsx";
 import Inputfield from "../../../components/form/input/InputField";
-import FileInput from "../../../components/form/input/FileInput";
+
 import FichierInput from "../../../components/form/input/fichierInput";
 import Select from "../../../components/form/Select";
 import TextArea from "../../../components/form/input/TextArea";
@@ -25,7 +25,7 @@ export default function BusinessCreate() {
   const { id } = useParams()
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [files, setFiles] = useState<File[]>([]);
-  const [produit, setProduits] = useState<Produit[]>([]);
+ 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,14 +33,6 @@ export default function BusinessCreate() {
 
 
 
-  const handleChange = (e: React.ChangeEvent<HTMLImageElement | HTMLSelectElement>) => {
-    setForm(prev => ({...prev, [e.target.name]: e.target.value}))
-  }
-
-
-  const handleSwitchChange = (checked: boolean) => {
-    console.log("Switch is now:", checked ? "ON" : "OFF");
-  };
 
     const handleSelectChange = (value: string) => {
       console.log("Selected value:", value);

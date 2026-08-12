@@ -19,6 +19,7 @@ import Select from "../../../components/form/Select";
 
 import {type Activite, activiteApi} from "../../../api/activite.api"
 import {type Scenario, scenarioApi} from "../../../api/scenario.api"
+import { type Groupe, groupeApi } from "../../../api/groupe.api"
 
 
 export default function IntentCreate() {
@@ -27,6 +28,7 @@ export default function IntentCreate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activites, setActivites] = useState<Activite[]>([]);
+  const [groupes, setGroupes] = useState<Groupe[]>([]);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const navigate = useNavigate();
 
@@ -44,6 +46,15 @@ export default function IntentCreate() {
     })); 
   };
 
+   // Select activite
+  const handleSelectGroupe = (value: string) => {
+    console.log("Selected value:", value);  
+    setForm((prev) => ({
+      ...prev,
+      groupe_id: value === 'null' ? null : value
+    })); 
+  };
+
     // Select activite
   const handleSelectScenario = (value: string) => {
     console.log("Selected value:", value);  
@@ -56,9 +67,11 @@ export default function IntentCreate() {
   const[form, setForm] = useState<Omit<Intent, 'id'>> ({
     nom : '',
     keywords: '',
+    lang: '',
     keywords_en: '',
-    activite_id: '',
-    scenario_id: '',
+    activite_id: null,
+    scenario_id: null,
+    groupe_id: null,
     priority: ''
      
   });
@@ -106,11 +119,36 @@ export default function IntentCreate() {
     load();
   }, []);
 
+  //Chargement des groupes
+  // Chargement des scenario
+  useEffect(() => {
+    const load = async () => {
+      try{
+        const res = await groupeApi.getAll();
+        console.log("🔥 RESPONSE groupe:", res);
+        const data = res.data ;
+        setGroupes(data);
+
+       } catch (err) {
+        console.error("❌ FETCH ERROR:", err);
+        setError("Erreur lors du chargement des groupe");
+      }
+    };
+    load();
+  }, []);
+
  
   const optionActives = [
     {value: 'null', label: 'Toutes les activites'}, 
     ...activites.map(a => ({ value: a.id, label:a.nom}))
   ];
+
+  const optionGroupes = [
+    {value: 'null', label: 'Toutes les groupes'}, 
+    ...groupes.map(a => ({ value: a.id, label:a.name}))
+  ];
+
+
   console.log('scenario', scenarios);
   const optionScenarios = [
     {value: 'null', label: 'Pas de scenario'}, 
@@ -189,6 +227,16 @@ export default function IntentCreate() {
                       placeholder = "Select une activité"
                       onChange={handleSelectChange}
                       defaultValue= { isEdit ? String(form.activite_id)  : ""}
+                    />
+                </div>
+                <div className="col-span-12 md:col-span-3">
+                    <Label>Groupe</Label>
+                    <Select
+                      name="goupe_id"
+                      options = {optionGroupes}
+                      placeholder = "Select un groupe"
+                      onChange={handleSelectGroupe}
+                      defaultValue= { isEdit ? String(form.groupe_id)  : ""}
                     />
                 </div>
                 <div className="col-span-12 md:col-span-3">

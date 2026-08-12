@@ -14,7 +14,7 @@ export const chatController = async (
 
 
         const { tenantId } = req.params;
-
+        console.log('tenant', req.params)
 
         const {
             message,
@@ -34,8 +34,6 @@ export const chatController = async (
             });
 
         }
-
-
 
         if(!message){
 
