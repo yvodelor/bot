@@ -19,7 +19,7 @@ const IntentExPage = () => {
   const [exemples, setExemples] = useState<IntentEx[]>([]);
   const [intents, setIntents] = useState<Intent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+
 
   
 
@@ -28,7 +28,7 @@ const IntentExPage = () => {
     async function load(){
       try{
         const rep = await intentApi.getAll()
-        setIntents(rep.data)
+        setIntents(rep)
       }catch(error){
       } finally{
         setLoading(false)
@@ -94,7 +94,7 @@ const IntentExPage = () => {
       try{
         const rep = await intentExApi.getAll()
         console.log(rep);
-        setExemples(rep.data)
+        setExemples(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -132,13 +132,6 @@ const IntentExPage = () => {
   if (loading) {
     return <p>⏳ Chargement...</p>;
   }
-
-  //Erreur
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
-
-
 
 
 

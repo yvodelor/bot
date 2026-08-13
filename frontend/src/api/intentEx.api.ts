@@ -5,7 +5,7 @@ export type IntentEx = {
   intent_id: string | null;
   phrase: string;
   lang:string;
-  embedding: string
+  embedding?: string
   
 };
 

@@ -99,7 +99,7 @@ export function DynamicTable<T extends Record<string, any>>({
       }
 
       // dates
-      
+      /*
       if (
         valA instanceof Date &&
         valB instanceof Date
@@ -108,7 +108,7 @@ export function DynamicTable<T extends Record<string, any>>({
           ? valA.getTime() - valB.getTime()
           : valB.getTime() - valA.getTime();
       }
-
+*/
       // strings
       return sortDir === "asc"
         ? String(valA).localeCompare(String(valB))

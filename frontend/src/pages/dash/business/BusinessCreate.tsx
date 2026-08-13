@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate,  useParams } from "react-router-dom";
 
 import { type Business, businessApi } from "../../../api/business.api";
 import { type Activite, activiteApi } from "../../../api/activite.api";
@@ -17,8 +17,7 @@ import Label from "../../../components/form/Label";
 import Inputfield from "../../../components/form/input/InputField";
 import Select from "../../../components/form/Select";
 import TextArea from "../../../components/form/input/TextArea";
-import Radio from "../../../components/form/input/Radio";
-import Switch from "../../../components/form/switch/Switch";
+
 
 
 
@@ -27,7 +26,7 @@ export default function BusinessCreate() {
   const { id} = useParams()
   const isEdit =!!id;
 
-  const [businesses, setBusinesses] = useState<Business[]>([]);
+
   const [activites, setActivites] = useState<Activite[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,9 +38,6 @@ export default function BusinessCreate() {
   const emailRef = useRef<HTMLDivElement>(null);
   const activiteRef = useRef<HTMLDivElement>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLImageElement | HTMLSelectElement>) => {
-    setForm(prev => ({...prev, [e.target.name]: e.target.value}))
-  }
 
   const[form, setForm] = useState<Omit<Business, 'id'>>({
     agent_name: '',
@@ -78,7 +74,7 @@ export default function BusinessCreate() {
       try{
         const res = await activiteApi.getAll();
         console.log("🔥 RESPONSE Activite:", res);
-        const data = res.data ;
+        const data = res ;
         setActivites(data);
 
        } catch (err) {
@@ -93,7 +89,7 @@ export default function BusinessCreate() {
   useEffect(() => {
     if(isEdit){
       businessApi.getById(id).then(data => { console.log(data)
-        setForm( data.data)
+        if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);

@@ -1,16 +1,16 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Input from "../../components/form/input/InputField";
-import Checkbox from "../../components/form/input/Checkbox";
+
 import { loginApi } from "../../api/auth.api";
 import {  LoaderCircle} from "lucide-react";
-import Alert from "../../components/alert/Alert";
+
 
 export default function PasswordForgot() {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+
+
   const [loading, setLoading] = useState(false);
   const [erreur, setErreur] = useState(false);
 
@@ -28,8 +28,7 @@ export default function PasswordForgot() {
     try {
       const response = await loginApi({
         email,
-        password,
-        remember,
+      
       });
 
       const data = response.data;

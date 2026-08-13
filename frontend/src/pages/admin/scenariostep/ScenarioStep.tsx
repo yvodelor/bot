@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {type ScenarioStep, scenarioStepApi} from "../../../api/scenarioStep.api.ts"
 import {type Scenario, scenarioApi} from "../../../api/scenario.api.ts"
 
@@ -22,7 +22,7 @@ export default function ScenarioStepCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const navigate = useNavigate();
 
@@ -44,8 +44,8 @@ export default function ScenarioStepCreate() {
 
   useEffect(() => {
     if(isEdit){
-      scenarioStepApi.getById(id).then(data => {
-        setForm( data.data)
+      scenarioStepApi.getById(Number(id)).then(data => {
+       if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);
@@ -65,12 +65,12 @@ export default function ScenarioStepCreate() {
         try{
           const res = await scenarioApi.getAll();
           console.log("🔥 RESPONSE scenarios:", res);
-          const data = res.data;
+          const data = res;
           setScenarios(data);
   
         } catch (err) {
           console.error("❌ FETCH ERROR:", err);
-          setError("Erreur lors du chargement des scenarios");
+     
         }
       };
       fetchScenarios ();

@@ -10,10 +10,12 @@ type FileInputProps = {
     error?: string;
 }
 
+/*
 type FileWithPrev={
     file: File;
     preview: string | null
 }
+*/
 
 export default function FichierInput({
     label = "Téléverser un ficher",

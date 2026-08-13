@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { type Business, businessApi } from "../../../api/business.api";
 import { type Produit, produitApi } from "../../../api/produit.api";
@@ -27,7 +27,7 @@ export default function BusinessCreate() {
   const [files, setFiles] = useState<File[]>([]);
  
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
 
   
 
@@ -62,12 +62,12 @@ export default function BusinessCreate() {
       try{
         const res = await businessApi.getAll();
         console.log("RESPONSE Activite:", res);
-        const data = res?.data ;
+        const data = res ;
         setBusinesses(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des produits");
+       
       }
     };
     load();
@@ -77,7 +77,7 @@ export default function BusinessCreate() {
   useEffect(() => {
     if(isEdit){
       produitApi.getById(id).then(data => {
-        setForm( data.data)
+        if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);

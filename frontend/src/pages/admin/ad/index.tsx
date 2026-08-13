@@ -30,8 +30,8 @@ const Ads = () => {
 
   const [ads, setAds] = useState<Ad[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [activites, setActivites] = useState<Ad[]>([]);
+
+
  
   
 
@@ -40,7 +40,7 @@ const Ads = () => {
       try{
         const rep = await adApi.getAll()
         console.log(rep);
-        setAds(rep.data)
+        setAds(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -116,12 +116,6 @@ const  AdsCols:  Column<Ad>[] = [
     return <p>⏳ Chargement...</p>;
   }
 
-  /* =========================
-     ERROR
-  ========================= */
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
 
 
 

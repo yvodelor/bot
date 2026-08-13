@@ -292,7 +292,7 @@ console.log('api-pl', apiUrl);
               />
 
               <textarea
-                rows="5"
+                
                 placeholder="Votre message"
                 className="w-full border rounded-lg p-4"
               />

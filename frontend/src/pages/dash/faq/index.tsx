@@ -68,7 +68,7 @@ const [error, setError] = useState<string>("");
         console.log("🔥 RESPONSE Faqdefault:", res);
 
         // compatible API (data wrapper ou direct array)
-        const data = res?.data 
+        const data = res 
 
         setFaqs(data);
       } catch (err) {

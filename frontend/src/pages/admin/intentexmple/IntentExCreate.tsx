@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {type Intent, intentApi} from "../../../api/intent.api"
-import {type Activite, activiteApi} from "../../../api/activite.api"
+
 import {type IntentEx, intentExApi} from "../../../api/intentEx.api"
 import DashLayout from "../../../layouts/DashLayout.tsx";
 
@@ -22,9 +22,9 @@ export default function IntentCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const [intents, setIntents] = useState<Intent[]>([]);
-  const [activites, setActivites] = useState<Activite[]>([]);
+
   const navigate = useNavigate();
 
   const isEdit =!!id;
@@ -58,7 +58,7 @@ export default function IntentCreate() {
   useEffect(() => {
     if(isEdit){
       intentExApi.getById(id).then(data => {
-        setForm( data.data)
+        if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);
@@ -69,12 +69,12 @@ export default function IntentCreate() {
         try{
           const res = await intentApi.getAll();
           console.log("🔥 RESPONSE intents:", res);
-          const data = res.data;
+          const data = res;
           setIntents(data);
   
          } catch (err) {
           console.error("❌ FETCH ERROR:", err);
-          setError("Erreur lors du chargement des les activite");
+         
         }
       };
       fetchIntents();

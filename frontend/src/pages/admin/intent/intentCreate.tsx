@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {type Intent, intentApi} from "../../../api/intent.api"
 
 import DashLayout from "../../../layouts/DashLayout.tsx";
@@ -26,7 +26,7 @@ export default function IntentCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const [activites, setActivites] = useState<Activite[]>([]);
   const [groupes, setGroupes] = useState<Groupe[]>([]);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
@@ -88,12 +88,12 @@ export default function IntentCreate() {
       try{
         const res = await activiteApi.getAll();
         console.log("🔥 RESPONSE Activite:", res);
-        const data = res.data ;
+        const data = res;
         setActivites(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des les activite");
+      
       }
     };
     fetchActivites();
@@ -108,12 +108,12 @@ export default function IntentCreate() {
       try{
         const res = await scenarioApi.getAll();
         console.log("🔥 RESPONSE scenario:", res);
-        const data = res.data ;
+        const data = res ;
         setScenarios(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des scenario");
+       
       }
     };
     load();
@@ -126,12 +126,12 @@ export default function IntentCreate() {
       try{
         const res = await groupeApi.getAll();
         console.log("🔥 RESPONSE groupe:", res);
-        const data = res.data ;
+        const data = res;
         setGroupes(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des groupe");
+        
       }
     };
     load();
@@ -158,7 +158,7 @@ export default function IntentCreate() {
   useEffect(() => {
     if(isEdit){
       intentApi.getById(id).then(data => {
-        setForm( data.data)
+        if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);

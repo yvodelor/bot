@@ -24,13 +24,6 @@ const  ProduitCols:  Column<Produit>[] = [
     sortable: true,
   },
 
- 
-  {
-    key: 'is_active',
-    header: 'Statut',
-    sortable: true,
-  },
-
    {
     key: 'image',
     header: 'Image',
@@ -59,7 +52,7 @@ const ProduitPage = () => {
         console.log("🔥 RESPONSE BUSINESSES:", res);
 
         // compatible API (data wrapper ou direct array)
-        const data = res?.data;
+        const data = res;
 
         setProduits(data);
       } catch (err) {

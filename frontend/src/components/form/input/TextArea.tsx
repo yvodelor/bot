@@ -1,7 +1,7 @@
 import React from "react";
 
 interface TextareaProps {
-  name:string;
+  name?:string;
   placeholder?: string; // Placeholder text
   rows?: number; // Number of rows
   value?: string; // Current value

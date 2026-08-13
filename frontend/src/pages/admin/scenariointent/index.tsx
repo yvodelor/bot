@@ -30,9 +30,9 @@ const Intents = () => {
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
-  const [scenarioInts, setScenarioInts] = useState<Scenario[]>([]);
+  const [scenarioInts, setScenarioInts] = useState<ScenarioIntent[]>([]);
  
   
 
@@ -41,7 +41,7 @@ const Intents = () => {
       try{
         const rep = await intentApi.getAll()
         console.log(rep);
-        setIntents(rep.data)
+        setIntents(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -57,7 +57,7 @@ const Intents = () => {
       try{
         const rep = await scenarioIntentApi.getAll()
         console.log(rep);
-        setScenarioInts(rep.data)
+        setScenarioInts(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -73,7 +73,7 @@ const Intents = () => {
     async function load(){
       try{
         const rep = await scenarioApi.getAll()
-        setScenarios(rep.data)
+        setScenarios(rep)
       }catch(error){
       } finally{
         setLoading(false)
@@ -159,12 +159,7 @@ const  ScenarioIntentCols:  Column<ScenarioIntent>[] = [
     return <p>⏳ Chargement...</p>;
   }
 
-  /* =========================
-     ERROR
-  ========================= */
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
+
 
 
 

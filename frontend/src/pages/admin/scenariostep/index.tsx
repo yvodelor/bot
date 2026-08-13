@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {type ScenarioStep, scenarioStepApi} from "../../../api/scenarioStep.api"
-import {type Scenario, scenarioApi} from "../../../api/scenario.api"
+
 
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
@@ -21,27 +21,12 @@ import {Edit, Trash2} from 'lucide-react'
 
 
 
-const ScenarioStep = () => {
+const ScenarioSteps = () => {
   const [scenarioSteps, setScenarioSteps] = useState<ScenarioStep[]>([]);
-  const [scenarios, setScenarios] = useState<Scenario[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
 
-  useEffect(() => {
-    async function load(){
-      try{
-        const rep = await scenarioApi.getAll()
-        console.log(rep);
-        setScenarios(rep.data)
-      }catch(error){
-        console.log('Erreur', error);
-      } finally{
-        setLoading(false)
-      }
-    }
-    load()
-  }, [])
- 
+  const [loading, setLoading] = useState<boolean>(true);
+
+
   
   const  ScenarioStepCols:  Column<ScenarioStep>[] = [ 
   {
@@ -83,7 +68,7 @@ const ScenarioStep = () => {
       try{
         const rep = await scenarioStepApi.getAll()
         console.log(rep);
-        setScenarioSteps(rep.data)
+        setScenarioSteps(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -105,10 +90,10 @@ const ScenarioStep = () => {
     if (!confirmDelete) return;
 
     try {
-      await scenarioStepApi.delete(id);
+      await scenarioStepApi.delete(Number(id));
 
       setScenarioSteps((prev) =>
-        prev.filter((b) => b.id !== id)
+        prev.filter((b) => b.id !== Number(id))
       );
 
       console.log("🗑️ Deleted:", id);
@@ -123,13 +108,6 @@ const ScenarioStep = () => {
   ========================= */
   if (loading) {
     return <p>⏳ Chargement...</p>;
-  }
-
-  /* =========================
-     ERROR
-  ========================= */
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
   }
 
 
@@ -167,7 +145,7 @@ const ScenarioStep = () => {
                   <Link to = {`/admin/scenario_step/${scenarioStep.id}`}><Edit  size="15"/></Link>
                 </Button> 
                
-                <Button  size ="sm" variant="primary" onClick={() => handleDelete(scenarioStep.id)} className="bg-red-600 px-2">
+                <Button  size ="sm" variant="primary" onClick={() => handleDelete(String(scenarioStep.id))} className="bg-red-600 px-2">
                   <Trash2  size="15"/>
                 </Button>
               
@@ -183,4 +161,4 @@ const ScenarioStep = () => {
   );
 };
 
-export default ScenarioStep;
+export default ScenarioSteps;

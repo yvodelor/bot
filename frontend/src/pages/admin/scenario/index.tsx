@@ -53,7 +53,7 @@ const  ScenarioCols:  Column<Scenario>[] = [
 const Intents = () => {
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+
 
  
   
@@ -63,7 +63,7 @@ const Intents = () => {
       try{
         const rep = await scenarioApi.getAll()
         console.log(rep);
-        setScenarios(rep.data)
+        setScenarios(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -103,13 +103,6 @@ const Intents = () => {
   ========================= */
   if (loading) {
     return <p>⏳ Chargement...</p>;
-  }
-
-  /* =========================
-     ERROR
-  ========================= */
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
   }
 
 

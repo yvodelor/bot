@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate,  useParams } from "react-router-dom";
 import {type Groupe, groupeApi} from "../../../api/groupe.api"
 
 import DashLayout from "../../../layouts/DashLayout";
@@ -13,7 +13,7 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import ComponentCard from "../../../components/common/ComponentCard";
 import Label from "../../../components/form/Label.tsx";
 import Inputfield from "../../../components/form/input/InputField";
-import TextArea from "../../../components/form/input/TextArea";
+
 
 
 
@@ -21,7 +21,7 @@ export default function GroupeCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const isEdit =!!id;
@@ -37,7 +37,7 @@ export default function GroupeCreate() {
   useEffect(() => {
     if(isEdit){
       groupeApi.getById(id).then(data => {
-        setForm( data.data)
+       if (data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);

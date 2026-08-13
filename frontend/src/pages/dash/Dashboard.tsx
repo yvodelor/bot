@@ -20,7 +20,7 @@ import {
   Tooltip,
   PieChart,
   Pie,
-  Cell,
+
   Legend,
 } from "recharts";
 
@@ -34,12 +34,7 @@ const chartData = [
   { jour: "Dim", conversations: 10 },
 ];
 
-const COLORS = [
-  "#2563eb",
-  "#16a34a",
-  "#f59e0b",
-  "#dc2626",
-];
+
 
 const channelData = [
   {
@@ -488,8 +483,11 @@ export default function Dashboard() {
                 >
 
                   {
-                    channelData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} />
+                      channelData.map((entry, index) => (
+                        <div key={index}>
+                            <span>{entry.name}</span>
+                            <span>{entry.value}</span>
+                        </div>
                     ))
                   }
 
@@ -575,6 +573,7 @@ export default function Dashboard() {
                     {item.channel}
                   </p>
 
+                
 
                   <strong className="text-2xl">
 

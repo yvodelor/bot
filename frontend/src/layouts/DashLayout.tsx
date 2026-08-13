@@ -13,10 +13,10 @@ import {
   Settings,
   ChevronDown,
   ChevronRight,
-  Menu,
+  
   X,
   FileText,
-  BarChart3, Bell
+  BarChart3
 } from "lucide-react";
 
 
@@ -113,7 +113,7 @@ export default function DashLayout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({}) 
-  const { userId, email, name, role} = useAuth(); 
+  const { role} = useAuth(); 
 
 
 
@@ -172,7 +172,7 @@ export default function DashLayout({ children }: LayoutProps) {
         <nav className="h-[calc(100%-64px)] overflow-y-auto p-4 space-y-2">
 
           {menuItems
-            .filter(item => !item.minRole || role >= item.minRole)
+            .filter(item => !item.minRole ||role !== null && role >= item.minRole)
             .map((item, index) => {
             const Icon = item.icon;
 

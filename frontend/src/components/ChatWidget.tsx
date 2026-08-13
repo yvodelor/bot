@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState, FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 import { useChatbot } from "../hooks/useChatbot";
 import { AdCampaign} from "./publicite/AdCampaign"
 
-import {type Ad, type ActiveAds, adApi} from "../api/ad.api"
+import {type ActiveAds, adApi} from "../api/ad.api"
 
 
-const API_URL = import.meta.env.VITE_API_URL;
+//const API_URL = import.meta.env.VITE_API_URL;
 
 type Props = {
     tenantId: string;
@@ -34,7 +34,7 @@ export const ChatWidget = ({
     const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
     const [ads, setAds] = useState<ActiveAds>({});
    
-
+   
 
     const {
         messages,
@@ -100,7 +100,9 @@ export const ChatWidget = ({
             }
         >
 
-            <div className="grid grid-cols-12 w-screen h-screen">
+            <div className={ open 
+                ? "grid grid-cols-12 w-screen h-screen"
+                : "grid grid-cols-12 w-screen h-screen"}>
 
                 {/* SIDEBAR DESKTOP Left */}
                 {variant === "platform" && (
@@ -157,7 +159,7 @@ export const ChatWidget = ({
                                 {description}
                             </p>
                         </div>
-
+                        
                         {mode !== "fullscreen" && (
                             <button
                                 onClick={() => setOpen(false)}
@@ -166,6 +168,7 @@ export const ChatWidget = ({
                                 X
                             </button>
                         )}
+                    
                     </div>
 
 

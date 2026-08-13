@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import DashLayout from "../../../layouts/DashLayout";
 import PageMeta from "../../../components/common/PageMeta";
@@ -18,7 +18,7 @@ export default function Faq() {
   const {id, businessId } = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
  
   const isEdit =!!id;
@@ -26,7 +26,7 @@ export default function Faq() {
   useEffect(() => {
     if(isEdit){
       faqApi.getById(id).then(data => {
-        setForm( data.data)
+        if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);
@@ -34,7 +34,7 @@ export default function Faq() {
   const[form, setForm] = useState<Omit<Faq, 'id'>> ({
     question : '',
     reponse: '',
-    business_id: businessId, 
+    business_id: Number(businessId) , 
   });
 
 

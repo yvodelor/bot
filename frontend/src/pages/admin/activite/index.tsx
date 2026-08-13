@@ -28,11 +28,7 @@ const  ActiviteCols:  Column<Activite>[] = [
     sortable: true,
   },
 
-  {
-    key: 'actif',
-    header: 'Actif',
-    sortable: true,
-  },
+
 
 ];
 
@@ -41,7 +37,7 @@ const  ActiviteCols:  Column<Activite>[] = [
 const Intents = () => {
   const [activites, setActivites] = useState<Activite[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+
 
  
   
@@ -51,7 +47,7 @@ const Intents = () => {
       try{
         const rep = await activiteApi.getAll()
         console.log(rep);
-        setActivites(rep.data)
+        setActivites(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -96,9 +92,6 @@ const Intents = () => {
   /* =========================
      ERROR
   ========================= */
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
 
 
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate,  useParams } from "react-router-dom";
 import {type Ad, adApi} from "../../../api/ad.api"
 
 import DashLayout from "../../../layouts/DashLayout";
@@ -23,8 +23,8 @@ export default function AdCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [ads, setAds] = useState<Ad[]>([]);
+
+
   const [files, setFiles] = useState<File[]>([]);
 
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ export default function AdCreate() {
   useEffect(() => {
     if(isEdit){
       adApi.getById(id).then(data => {
-        setForm( data.data)
+       if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);

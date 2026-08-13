@@ -16,7 +16,7 @@ import ComponentCard from "../../../components/common/ComponentCard";
 
 
 
-import {Edit, Trash2} from 'lucide-react'
+import {Edit} from 'lucide-react'
 /* =========================
    TYPE (sans ORM)
 ========================= */
@@ -30,7 +30,7 @@ const Intents = () => {
 
   const [intents, setIntents] = useState<Intent[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+
   const [activites, setActivites] = useState<Activite[]>([]);
 
  
@@ -41,7 +41,7 @@ const Intents = () => {
       try{
         const rep = await intentApi.getAll()
         console.log(rep);
-        setIntents(rep.data)
+        setIntents(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -57,7 +57,7 @@ const Intents = () => {
     async function load(){
       try{
         const rep = await activiteApi.getAll()
-        setActivites(rep.data)
+        setActivites(rep)
       }catch(error){
       } finally{
         setLoading(false)
@@ -145,13 +145,6 @@ const  IntentCols:  Column<Intent>[] = [
   ========================= */
   if (loading) {
     return <p>⏳ Chargement...</p>;
-  }
-
-  /* =========================
-     ERROR
-  ========================= */
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
   }
 
 

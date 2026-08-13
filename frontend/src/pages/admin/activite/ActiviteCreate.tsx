@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate,  useParams } from "react-router-dom";
 import {type Activite, activiteApi} from "../../../api/activite.api.ts"
 
 import DashLayout from "../../../layouts/DashLayout.tsx";
@@ -13,7 +13,7 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb.tsx";
 import ComponentCard from "../../../components/common/ComponentCard.tsx";
 import Label from "../../../components/form/Label.tsx";
 import Inputfield from "../../../components/form/input/InputField.tsx";
-import TextArea from "../../../components/form/input/TextArea.tsx";
+
 
 
 
@@ -21,7 +21,7 @@ export default function IntentCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const navigate = useNavigate();
 
   const isEdit =!!id;
@@ -37,7 +37,7 @@ export default function IntentCreate() {
   useEffect(() => {
     if(isEdit){
       activiteApi.getById(id).then(data => {
-        setForm( data.data)
+        if( data !== null )setForm( data)
       })
     }
   }, [id, isEdit]);
@@ -68,6 +68,7 @@ export default function IntentCreate() {
     <DashLayout>
       <PageMeta
         title="Ajouter ou Modifier d'une activité" 
+        description = ""
         />
       <PageBreadcrumb pageTitle="Agent IA" />
 

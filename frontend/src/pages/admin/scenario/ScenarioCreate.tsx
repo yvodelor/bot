@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {type Scenario, scenarioApi} from "../../../api/scenario.api"
 import {type Activite, activiteApi} from "../../../api/activite.api"
@@ -25,7 +25,7 @@ export default function IntentCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const [activites, setActivites] = useState<Activite[]>([]);
   const [groupes, setGroupes] = useState<Groupe[]>([]);
   const [intents, setIntents] = useState<Intent[]>([]);
@@ -75,12 +75,12 @@ export default function IntentCreate() {
       try{
         const res = await activiteApi.getAll();
         console.log("🔥 RESPONSE Activite:", res);
-        const data = res.data ;
+        const data = res ;
         setActivites(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des les activite");
+   
       }
     };
     fetchActivites();
@@ -92,12 +92,12 @@ export default function IntentCreate() {
       try{
         const res = await intentApi.getAll();
         console.log("🔥 RESPONSE intents:", res);
-        const data = res.data;
+        const data = res;
         setIntents(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des les activite");
+        
       }
     };
     fetchIntents();
@@ -109,11 +109,11 @@ export default function IntentCreate() {
       try{
         const res = await groupeApi.getAll();
         console.log("🔥 RESPONSE intents:", res);
-        const data = res.data;
+        const data = res;
         setGroupes(data);
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des les groupe");
+     
       }
     };
     load();
@@ -135,7 +135,7 @@ export default function IntentCreate() {
   useEffect(() => {
     if(isEdit){
         scenarioApi.getById(id).then(data => {
-        setForm( data.data)
+        if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);

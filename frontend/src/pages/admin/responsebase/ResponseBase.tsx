@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import DashLayout from "../../../layouts/DashLayout";
 
@@ -24,11 +24,11 @@ import {type Intent, intentApi} from "../../../api/intent.api"
 export default function ResponseBaseCreate() {
   const { id } = useParams()
   
-  const [responseBases, setResponseBases] = useState<ResponseBase[]>([]);
+
   const [activites, setActivites] = useState<Activite[]>([]);
   const [intents, setIntents] = useState<Intent[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
 
   
   // Select activite
@@ -84,12 +84,12 @@ export default function ResponseBaseCreate() {
       try{
         const res = await activiteApi.getAll();
         console.log("🔥 RESPONSE Activite:", res);
-        const data = res.data ;
+        const data = res ;
         setActivites(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des les activite");
+     
       }
     };
     fetchActivites();
@@ -101,12 +101,12 @@ export default function ResponseBaseCreate() {
       try{
         const res = await intentApi.getAll();
         console.log("🔥 RESPONSE intents:", res);
-        const data = res.data;
+        const data = res;
         setIntents(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des les activite");
+       
       }
     };
     fetchIntents();
@@ -118,7 +118,7 @@ export default function ResponseBaseCreate() {
   useEffect(() => {
     if(isEdit){
       responseBaseApi.getById(id).then(data => {
-        setForm( data.data)
+        if(data !== null) setForm( data)
       })
     }
   }, [id, isEdit]);

@@ -1,7 +1,7 @@
 import { useParams} from 'react-router-dom';
 import { useEffect, useState} from 'react';
 import {ChatWidget} from "../../components/ChatWidget"
-import { type Business, businessApi } from "../../api/business.api";
+import { type Business } from "../../api/business.api";
 import PageMeta from "../../components/common/PageMeta";
 import  axiosClient from "../../api/axiosClient"
 

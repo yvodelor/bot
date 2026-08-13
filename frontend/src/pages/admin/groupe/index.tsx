@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {type Groupe, groupeApi} from "../../../api/groupe.api"
 
+import {type Groupe, groupeApi} from "../../../api/groupe.api"
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 
@@ -21,16 +21,10 @@ import {Edit, Trash2} from 'lucide-react'
 ========================= */
 
 
-const  ActiviteCols:  Column<Activite>[] = [ 
+const  GroupeCols:  Column<Groupe>[] = [ 
   {
-    key: 'nom',
+    key: 'name',
     header: 'nom',
-    sortable: true,
-  },
-
-  {
-    key: 'actif',
-    header: 'Actif',
     sortable: true,
   },
 
@@ -39,9 +33,9 @@ const  ActiviteCols:  Column<Activite>[] = [
 
 
 const Intents = () => {
-  const [activites, setActivites] = useState<Activite[]>([]);
+  const [groupes, setGroupes] = useState<Groupe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+
 
  
   
@@ -49,9 +43,9 @@ const Intents = () => {
   useEffect(() => {
     async function load(){
       try{
-        const rep = await activiteApi.getAll()
+        const rep = await groupeApi.getAll()
         console.log(rep);
-        setActivites(rep.data)
+        setGroupes(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -73,9 +67,9 @@ const Intents = () => {
     if (!confirmDelete) return;
 
     try {
-      await activiteApi.delete(id);
+      await groupeApi.delete(id);
 
-      setActivites((prev) =>
+      setGroupes((prev) =>
         prev.filter((b) => b.id !== id)
       );
 
@@ -93,13 +87,7 @@ const Intents = () => {
     return <p>⏳ Chargement...</p>;
   }
 
-  /* =========================
-     ERROR
-  ========================= */
-  if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
-  }
-
+ 
 
 
 
@@ -130,8 +118,8 @@ const Intents = () => {
             </div>
           </div>
           <DynamicTable 
-            data={activites} 
-            columns={ ActiviteCols }
+            data={groupes} 
+            columns={ GroupeCols }
             actions={(activite) => (
               
               <div className="flex gap-1 justify-end">

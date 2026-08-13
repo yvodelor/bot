@@ -5,7 +5,7 @@ import Input from "../../components/form/input/InputField";
 import Checkbox from "../../components/form/input/Checkbox";
 import { loginApi } from "../../api/auth.api";
 import {  LoaderCircle} from "lucide-react";
-import Alert from "../../components/alert/Alert";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");

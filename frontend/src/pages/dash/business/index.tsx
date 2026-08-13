@@ -1,7 +1,7 @@
 // src/pages/business/index.tsx
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+
 import { type Business, businessApi } from "../../../api/business.api";
 import { Dropdown } from "../../../components/dropdown/Dropdown";
 import { DropdownItem } from "../../../components/dropdown/DropdownItem";
@@ -68,7 +68,7 @@ const BusinessPage = () => {
         console.log("🔥 RESPONSE BUSINESSES:", res);
 
         // compatible API (data wrapper ou direct array)
-        const data = res.data 
+        const data = res
 
         setBusinesses(data);
       } catch (err) {
@@ -173,7 +173,7 @@ const BusinessPage = () => {
                     className="dropdown-toggle flex items-center gap-2 px-4 py-2 rounded-lg border bg-white"
                     onClick={() =>
                       setOpenDropdownId(
-                        openDropdownId === business.id ? null : business.id
+                        openDropdownId === Number(business.id) ? null : Number(business.id)
                       )
                     }
                   >
@@ -184,7 +184,7 @@ const BusinessPage = () => {
 
                   {/* Contenu du dropdown */}
                   <Dropdown
-                    isOpen={openDropdownId === business.id}
+                    isOpen={openDropdownId !== null && openDropdownId === Number(business.id)}
                     onClose={() => setOpenDropdownId(null)}
                   >
 

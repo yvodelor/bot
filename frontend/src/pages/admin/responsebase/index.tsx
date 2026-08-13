@@ -11,7 +11,7 @@ import { DynamicTable} from "../../../components/tables/DynamicTable";
 import type{ Column } from "../../../components/tables/DynamicTable";
 import  Button  from "../../../components/button/Button";
 import ComponentCard from "../../../components/common/ComponentCard";
-import {Edit, Trash2, BookOpen} from 'lucide-react'
+import {Edit, Trash2} from 'lucide-react'
 import {type ResponseBase, responseBaseApi} from "../../../api/responseBase.api"
 import {type Intent, intentApi} from "../../../api/intent.api"
 import {type Activite, activiteApi} from "../../../api/activite.api"
@@ -32,7 +32,7 @@ const ResponseBase = () => {
     async function load(){
       try{
         const rep = await intentApi.getAll()
-        setIntents(rep.data)
+        setIntents(rep)
       }catch(error){
       } finally{
         setLoading(false)
@@ -47,7 +47,7 @@ const ResponseBase = () => {
     async function load(){
       try{
         const rep = await activiteApi.getAll()
-        setActivites(rep.data)
+        setActivites(rep)
       }catch(error){
       } finally{
         setLoading(false)
@@ -127,7 +127,7 @@ const ResponseBase = () => {
         const res = await responseBaseApi.getAll();
 
         console.log("🔥 RESPONSE Faqdefault:", res);
-        const data = res?.data;
+        const data = res;
 
         setResponseBases(data);
       } catch (err) {

@@ -1,4 +1,11 @@
-import { lazy, Suspense} from "react"
+import { lazy } from "react";
+import type { ReactElement } from "react";
+
+export interface AppRoute {
+    path: string;
+    element: ReactElement;
+    protected?: boolean;
+}
 
 import Intents from "./pages/admin/intent";
 import IntentExCreate from "./pages/admin/intentexmple/IntentExCreate";
@@ -8,11 +15,19 @@ import Activites from "./pages/admin/activite";
 import ActiviteCreate from "./pages/admin/activite/ActiviteCreate";
 import Scenarios from "./pages/admin/scenario";
 import ScenarioCreate from "./pages/admin/scenario/ScenarioCreate";
-import ScenarioStep from "./pages/admin/scenariostep/";
+import ScenarioSteps from "./pages/admin/scenariostep";
 import ScenarioStepCreate from "./pages/admin/scenariostep/ScenarioStep";
 
+//==================================
+// TYPES
+// ======================================================
 
-//import ProtectedRoute from "./components/ProtectedRoute";
+
+
+
+// ======================================================
+// PAGES
+// ======================================================
 
 const HomePage = lazy(() => import("./pages/Home"));
 const Cgu = lazy(() => import("./pages/Cgu"));
@@ -27,21 +42,17 @@ const Profile = lazy(() => import("./pages/auth/Profile"));
 const Register = lazy(() => import("./pages/auth/Register"));
 const PasswordForgot = lazy(() => import("./pages/auth/Password-forgot"));
 
-/* Tableau de bord */ 
-const Dashboard = lazy(() => import ("./pages/dash/Dashboard"));
+
+/* Dashboard */
+const Dashboard = lazy(() => import("./pages/dash/Dashboard"));
 
 
 /* Chatbot */
-const Bots = lazy(() => import("./pages/chatbot"));
-//const ChatWidget = lazy(() => import("./components/ChatWidget"));
+
 const ChatPage = lazy(() => import("./pages/chatbot/Chat"));
-   
 
 
 
-/* Agent */
-const AgentPage = lazy(() => import("./pages/dash/agent"));
-const AgentCreate = lazy(() => import("./pages/dash/agent/AgentCreate"));
 
 /* Business */
 const BusinessPage = lazy(() => import("./pages/dash/business/"));
@@ -52,106 +63,348 @@ const BusinessCreate = lazy(() => import("./pages/dash/business/BusinessCreate")
 const ProduitPage = lazy(() => import("./pages/dash/produit"));
 const ProduitCreate = lazy(() => import("./pages/dash/produit/ProduitCreate"));
 
-const Faq = lazy(() =>import("./pages/dash/faq/") );
+
+/* FAQ */
+const Faq = lazy(() => import("./pages/dash/faq/"));
 const FaqCreate = lazy(() => import("./pages/dash/faq/FaqCreate"));
-  
 
 
+/* Response */
 const ResponseBase = lazy(() => import("./pages/admin/responsebase"));
-const ResponseBaseCreate = lazy(() => import( "./pages/admin/responsebase/ResponseBase"));
+const ResponseBaseCreate = lazy(() =>
+    import("./pages/admin/responsebase/ResponseBase")
+);
 
+
+/* Ads */
 const Ad = lazy(() => import("./pages/admin/ad"));
 const AdCreate = lazy(() => import("./pages/admin/ad/adCreate"));
 
+
 /* ScenarioIntent */
-const ScenarioIntent = lazy(() => import("./pages/admin/scenariointent"));
-const ScenarioIntentCreate = lazy(() => import("./pages/admin/scenariointent/ScenarioIntentCreate"));
+const ScenarioIntent = lazy(() =>
+    import("./pages/admin/scenariointent")
+);
+
+const ScenarioIntentCreate = lazy(() =>
+    import("./pages/admin/scenariointent/ScenarioIntentCreate")
+);
 
 
+// ======================================================
+// ROUTES
+// ======================================================
+
+const appRoutes: AppRoute[] = [
+
+    // ==================================================
+    // PUBLIC
+    // ==================================================
+
+    { path: "/", element: <HomePage /> },
+    { path: "/cgu", element: <Cgu /> },
+    { path: "/deleteData", element: <DeleteData /> },
+    { path: "/PolicyPrivacy", element: <PolicyPrivacy /> },
 
 
+    // ==================================================
+    // AUTH
+    // ==================================================
 
-const appRoutes = [
-  
-  // Liens utiles
-  { path: "/", element: <HomePage /> },
-  { path: "/cgu", element: <Cgu /> },
-  { path: "/deleteData", element: <DeleteData /> },
-  { path: "/PolicyPrivacy", element: <PolicyPrivacy /> },
+    { path: "/login", element: <Login /> },
+    { path: "/logout", element: <Logout /> },
+    { path: "/register", element: <Register /> },
+    { path: "/password-forgot", element: <PasswordForgot /> },
 
-  // Liens Auth
-  { path: "/login", element: <Login /> },
-  { path: "/logout", element: <Logout />},
-  { path: "/register", element: <Register /> },
-  { path: "/password-forgot", element: <PasswordForgot /> },
-  { path: "/profile", element: <Profile /> },
-
-  // Liens Dash
-  { path: "/dashboard", element: <Dashboard /> },
-
-  { path: "/agents", element: <AgentPage /> },
-  { path: "/agent", element: <AgentCreate /> },
-  { path: "/agent/:id", element: <AgentCreate /> },
-
-  { path: "/businesses", element: <BusinessPage /> },
-  { path: "/business", element: <BusinessCreate /> },
-  { path: "/business/:id", element: <BusinessCreate /> },
-  { path: "/business/bot/:botId", element: <BusinessCreate /> },
+    {
+        path: "/profile",
+        element: <Profile />,
+        protected: true
+    },
 
 
-  { path: "/produits", element: <ProduitPage /> },
-  { path: "/produit", element: <ProduitCreate /> },
-  { path: "/produit/:id", element: <ProduitCreate /> },
+    // ==================================================
+    // DASHBOARD
+    // ==================================================
 
-  { path: "/faqs/", element: <Faq /> },
-  { path: "/faq/", element: <FaqCreate /> },
-  { path: "/faq/:id", element: <FaqCreate /> },
-  { path: "/faq/business/:businessId", element: <FaqCreate /> },
-
-
-  // Liens Admin
-  { path: "/admin/response_bases/", element: <ResponseBase /> },
-  { path: "/admin/response_base", element: <ResponseBaseCreate /> },
-  { path: "/admin/response_base/:id", element: <ResponseBaseCreate /> },
-
-  { path: "/admin/intents", element: <Intents /> },
-  { path: "/admin/intent", element: <IntentCreate /> },
-  { path: "/admin/intent/:id", element: <IntentCreate /> },
-
-  { path: "/admin/intent/exemples", element: <IntentExPage />},
-  { path: "/admin/intent/exemple/:id", element: <IntentExCreate />},
-  { path: "/admin/intent/exemple", element: <IntentExCreate />},
-
-  { path: "/admin/activites", element: <Activites /> },
-  { path: "/admin/activite", element: <ActiviteCreate /> },
-  { path: "/admin/activite/:id", element: <ActiviteCreate /> },
-
-  { path: "/admin/scenarios", element: <Scenarios /> },
-  { path: "/admin/scenario", element: <ScenarioCreate /> },
-  { path: "/admin/scenario/:id", element: <ScenarioCreate /> },
-
-  { path: "/admin/scenario_steps", element: <ScenarioStep /> },
-  { path: "/admin/scenario_steps/scenario/:scenarioId", element: <ScenarioStep /> },
-
-  { path: "/admin/scenario_step", element: <ScenarioStepCreate /> },
-  { path: "/admin/scenario_step/:id", element: <ScenarioStepCreate /> },
-
-  { path: "/admin/ads", element: <Ad /> },
-  { path: "/admin/ad", element: <AdCreate /> },
-  { path: "/admin/ad/:id", element: <AdCreate /> },
-
-  { path: "/admin/scenario_intents", element: <ScenarioIntent /> },
-  { path: "/admin/scenario_intent", element: <ScenarioIntentCreate /> },
-  { path: "/admin/scenario_intent/:id", element: <ScenarioIntentCreate /> }, 
-
-  { path: "/product/business/:businessId", element: <ProduitPage /> },
+    {
+        path: "/dashboard",
+        element: <Dashboard />,
+        protected: true
+    },
 
 
-  // Lien Chat
-  { path: "/chat", element: <Bots /> },
- 
-  { path: "/chatbot/:slugBusiness", element: <ChatPage /> },  
+    // ==================================================
+    // BUSINESS
+    // ==================================================
+
+    {
+        path: "/businesses",
+        element: <BusinessPage />,
+        protected: true
+    },
+
+    {
+        path: "/business",
+        element: <BusinessCreate />,
+        protected: true
+    },
+
+    {
+        path: "/business/:id",
+        element: <BusinessCreate />,
+        protected: true
+    },
+
+    {
+        path: "/business/bot/:botId",
+        element: <BusinessCreate />,
+        protected: true
+    },
+
+
+    // ==================================================
+    // PRODUITS
+    // ==================================================
+
+    {
+        path: "/produits",
+        element: <ProduitPage />,
+        protected: true
+    },
+
+    {
+        path: "/produit",
+        element: <ProduitCreate />,
+        protected: true
+    },
+
+    {
+        path: "/produit/:id",
+        element: <ProduitCreate />,
+        protected: true
+    },
+
+    {
+        path: "/product/business/:businessId",
+        element: <ProduitPage />,
+        protected: true
+    },
+
+
+    // ==================================================
+    // FAQ
+    // ==================================================
+
+    {
+        path: "/faqs/",
+        element: <Faq />,
+        protected: true
+    },
+
+    {
+        path: "/faq/",
+        element: <FaqCreate />,
+        protected: true
+    },
+
+    {
+        path: "/faq/:id",
+        element: <FaqCreate />,
+        protected: true
+    },
+
+    {
+        path: "/faq/business/:businessId",
+        element: <FaqCreate />,
+        protected: true
+    },
+
+
+    // ==================================================
+    // ADMIN
+    // ==================================================
+
+    {
+        path: "/admin/response_bases/",
+        element: <ResponseBase />,
+        protected: true
+    },
+
+    {
+        path: "/admin/response_base",
+        element: <ResponseBaseCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/response_base/:id",
+        element: <ResponseBaseCreate />,
+        protected: true
+    },
+
+
+    {
+        path: "/admin/intents",
+        element: <Intents />,
+        protected: true
+    },
+
+    {
+        path: "/admin/intent",
+        element: <IntentCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/intent/:id",
+        element: <IntentCreate />,
+        protected: true
+    },
+
+
+    {
+        path: "/admin/intent/exemples",
+        element: <IntentExPage />,
+        protected: true
+    },
+
+    {
+        path: "/admin/intent/exemple/:id",
+        element: <IntentExCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/intent/exemple",
+        element: <IntentExCreate />,
+        protected: true
+    },
+
+
+    {
+        path: "/admin/activites",
+        element: <Activites />,
+        protected: true
+    },
+
+    {
+        path: "/admin/activite",
+        element: <ActiviteCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/activite/:id",
+        element: <ActiviteCreate />,
+        protected: true
+    },
+
+
+    // ==================================================
+    // SCENARIOS
+    // ==================================================
+
+    {
+        path: "/admin/scenarios",
+        element: <Scenarios />,
+        protected: true
+    },
+
+    {
+        path: "/admin/scenario",
+        element: <ScenarioCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/scenario/:id",
+        element: <ScenarioCreate />,
+        protected: true
+    },
+
+
+    {
+        path: "/admin/scenario_steps",
+        element: <ScenarioSteps />,
+        protected: true
+    },
+
+    {
+        path: "/admin/scenario_steps/scenario/:scenarioId",
+        element: <ScenarioStepCreate />,
+        protected: true
+    },
+
+
+    {
+        path: "/admin/scenario_step",
+        element: <ScenarioStepCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/scenario_step/:id",
+        element: <ScenarioStepCreate />,
+        protected: true
+    },
+
+
+    // ==================================================
+    // ADS
+    // ==================================================
+
+    {
+        path: "/admin/ads",
+        element: <Ad />,
+        protected: true
+    },
+
+    {
+        path: "/admin/ad",
+        element: <AdCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/ad/:id",
+        element: <AdCreate />,
+        protected: true
+    },
+
+
+    // ==================================================
+    // SCENARIO INTENT
+    // ==================================================
+
+    {
+        path: "/admin/scenario_intents",
+        element: <ScenarioIntent />,
+        protected: true
+    },
+
+    {
+        path: "/admin/scenario_intent",
+        element: <ScenarioIntentCreate />,
+        protected: true
+    },
+
+    {
+        path: "/admin/scenario_intent/:id",
+        element: <ScenarioIntentCreate />,
+        protected: true
+    },
+
+
+    // ==================================================
+    // CHAT
+    // ==================================================
+    {
+        path: "/chatbot/:slugBusiness",
+        element: <ChatPage />
+    }
 
 ];
 
-export default appRoutes
+
+export default appRoutes;

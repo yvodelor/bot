@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate,  useParams } from "react-router-dom";
 import DashLayout from "../../../layouts/DashLayout";
 
 import PageMeta from "../../../components/common/PageMeta";
@@ -10,7 +10,7 @@ import ComponentCard from "../../../components/common/ComponentCard";
 import Label from "../../../components/form/Label";
 
 
-import Select from "../../../components/form/Select";
+import Select, {type Option} from "../../../components/form/Select";
 
 import {type Intent, intentApi} from "../../../api/intent.api"
 import {type Scenario, scenarioApi} from "../../../api/scenario.api"
@@ -21,7 +21,7 @@ export default function ScenarioIntentCreate() {
   const {id} = useParams()
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
   const [intents, setIntents] = useState<Intent[]>([]);
 
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
@@ -76,12 +76,12 @@ export default function ScenarioIntentCreate() {
       try{
         const res = await intentApi.getAll();
         console.log("🔥 RESPONSE Activite:", res);
-        const data = res.data ;
+        const data = res ;
         setIntents(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des les intents");
+   
       }
     };
     fetchIntents();
@@ -96,12 +96,12 @@ export default function ScenarioIntentCreate() {
       try{
         const res = await scenarioApi.getAll();
         console.log("🔥 RESPONSE scenario:", res);
-        const data = res.data ;
+        const data = res;
         setScenarios(data);
 
        } catch (err) {
         console.error("❌ FETCH ERROR:", err);
-        setError("Erreur lors du chargement des scenario");
+    
       }
     };
     load();
@@ -111,16 +111,17 @@ export default function ScenarioIntentCreate() {
   const optionIntents =  intents.map(a => ({ value: a.id, label:a.nom})) ;
   const optionScenarios =  scenarios.map(a => ({ value: a.id, label: a.name })) ;
 
-  const optionActions = [
-    {vaule: 'continue', label: 'Continue'},
-    {vaule: 'cancel', label: 'Annuler'},
-    {vaule: 'ignored', label: 'Ignorer'},
+  const optionActions:  Option[]  = [
+    {value: "continue", label: "Continue"},
+    {value: "cancel", label: "Annuler"},
+    {value: "ignored", label: "Ignorer"},
     
   ]
+
   useEffect(() => {
     if(isEdit){
       scenarioIntentApi.getById(id).then(data => {
-        setForm( data.data)
+        if( data !== null)  setForm( data)
       })
     }
   }, [id, isEdit]);
