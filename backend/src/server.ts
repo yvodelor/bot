@@ -1,6 +1,5 @@
-import app from "./app"
+import app from "./app";
 import { initFuseGlobal } from "./chatbot/entityService";
-
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -11,7 +10,7 @@ async function startServer() {
     try {
         await initFuseGlobal();
 
-        app.listen(PORT, () => {
+        app.listen(PORT, "0.0.0.0", () => {
             console.log(`Serveur lancé sur le port ${PORT}`);
         });
 
