@@ -4,7 +4,7 @@ import { ChatSessionService }
 from "./chatSessionService";
 
 import { ExtractionService }
-from "./ExtractionService";
+from "./extractionService";
 
 import { pickRandom, replacePlaceholders }
 from "../utils/fonctions";
@@ -103,7 +103,8 @@ case 8:
 
     const extraction = await ExtractionService.extractOrder(
         message,
-        tenantData
+        tenantData,
+        business.id
     );
 
 

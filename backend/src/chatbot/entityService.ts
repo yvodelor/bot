@@ -1,4 +1,3 @@
-
 import Fuse from "fuse.js";
 import fs from "fs";
 import path from "path";
@@ -6,47 +5,53 @@ import path from "path";
 import { produitService } from "../services/produitService";
 import { cleanMessage } from "./cleanMessage";
 
-
 // ======================================================
 // TYPES
 // ======================================================
 
+interface ProduitBDD {
+    id: number;
+    name: string;
+    business_id: number | null;
+}
+
 interface ProduitFuse {
     synonyme: string;
     nom: string;
-    id: number | string;
-    business_id: string | null;
+    id: number;
+    business_id: number | null;
 }
 
 interface EntityFuse {
     synonyme: string;
     nom: string;
-    id?: number | string;
 }
 
+type FuseProduit = Fuse<ProduitFuse>;
+type FuseEntity = Fuse<EntityFuse>;
+
+type FuseResult<T> = Fuse.FuseResult<T>;
 
 // ======================================================
 // INDEX FUSE
 // ======================================================
 
 // Un index par business
-const fuseBusinesses =
-    new Map<string, Fuse<ProduitFuse>>();
+const fuseBusinesses = new Map<string, FuseProduit>();
 
 // Produits globaux
-let fuseGlobal: Fuse<ProduitFuse> | null = null;
+let fuseGlobal: FuseProduit | null = null;
 
 // Entités JSON
-let fuseEntities: Fuse<EntityFuse> | null = null;
+let fuseEntities: FuseEntity | null = null;
 
 let isLoading = false;
-
 
 // ======================================================
 // OPTIONS FUSE
 // ======================================================
 
-const fuseOptions = {
+const fuseOptions: Fuse.IFuseOptions<ProduitFuse> = {
     keys: ["synonyme"],
     threshold: 0.4,
     includeScore: true,
@@ -54,13 +59,11 @@ const fuseOptions = {
     ignoreLocation: true
 };
 
-
 // ======================================================
 // INITIALISATION
 // ======================================================
 
-export async function initFuseGlobal() {
-
+export async function initFuseGlobal(): Promise<void> {
     if (isLoading) {
         return;
     }
@@ -68,34 +71,24 @@ export async function initFuseGlobal() {
     isLoading = true;
 
     try {
-
         console.log("[Fuse] Chargement en cours...");
-
 
         // ==================================================
         // 1. PRODUITS BDD
         // ==================================================
 
-        const produits =
-            await produitService.getAll();
+        const produits = await produitService.getAll();
 
-        console.log(
-            `[Fuse] ${produits.length} produits récupérés`
-        );
+        console.log(`[Fuse] ${produits.length} produits récupérés`);
 
-
-        const produitsParBusiness =
-            new Map<string, ProduitFuse[]>();
-
+        const produitsParBusiness = new Map<string, ProduitFuse[]>();
         const produitsGlobaux: ProduitFuse[] = [];
-
 
         // ==================================================
         // 2. INDEXER LES PRODUITS BDD
         // ==================================================
 
         for (const produit of produits) {
-
             /*
              * La BDD possède :
              *
@@ -110,24 +103,12 @@ export async function initFuseGlobal() {
                 continue;
             }
 
-
             const entree: ProduitFuse = {
-
-                // Le name est le terme recherché
-                synonyme:
-                    cleanMessage(produit.name),
-
-                nom:
-                    produit.name,
-
-                id:
-                    produit.id,
-
-                business_id:
-                    produit.business_id ?? null
-
+                synonyme: cleanMessage(produit.name),
+                nom: produit.name,
+                id: produit.id,
+                business_id: Number(produit.business_id) ?? null
             };
-
 
             // ==============================================
             // PRODUIT GLOBAL
@@ -137,43 +118,24 @@ export async function initFuseGlobal() {
                 produit.business_id === null ||
                 produit.business_id === undefined
             ) {
-
-                produitsGlobaux.push(
-                    entree
-                );
-
+                produitsGlobaux.push(entree);
                 continue;
             }
-
 
             // ==============================================
             // PRODUIT BUSINESS
             // ==============================================
 
-            const businessId =
-                String(produit.business_id);
+            const businessId = String(produit.business_id);
 
-
-            if (
-                !produitsParBusiness.has(
-                    businessId
-                )
-            ) {
-
-                produitsParBusiness.set(
-                    businessId,
-                    []
-                );
-
+            if (!produitsParBusiness.has(businessId)) {
+                produitsParBusiness.set(businessId, []);
             }
-
 
             produitsParBusiness
                 .get(businessId)!
                 .push(entree);
-
         }
-
 
         // ==================================================
         // 3. FUSE DES BUSINESSES
@@ -181,181 +143,115 @@ export async function initFuseGlobal() {
 
         fuseBusinesses.clear();
 
-
-        for (
-            const [businessId, listeProduits]
-            of produitsParBusiness
-        ) {
-
-            const fuse =
-                new Fuse(
-                    listeProduits,
-                    fuseOptions
-                );
-
-
-            fuseBusinesses.set(
-                businessId,
-                fuse
+        for (const [businessId, listeProduits] of produitsParBusiness) {
+            const fuse = new Fuse<ProduitFuse>(
+                listeProduits,
+                fuseOptions
             );
 
+            fuseBusinesses.set(businessId, fuse);
 
             console.log(
                 `[Fuse] Business ${businessId} : ` +
                 `${listeProduits.length} produits`
             );
-
         }
-
 
         // ==================================================
         // 4. FUSE GLOBAL
         // ==================================================
 
-        if (
-            produitsGlobaux.length > 0
-        ) {
-
-            fuseGlobal =
-                new Fuse(
-                    produitsGlobaux,
-                    fuseOptions
-                );
-
+        if (produitsGlobaux.length > 0) {
+            fuseGlobal = new Fuse<ProduitFuse>(
+                produitsGlobaux,
+                fuseOptions
+            );
+        } else {
+            fuseGlobal = null;
         }
 
-
         console.log(
-            `[Fuse] Global : ` +
-            `${produitsGlobaux.length} produits`
+            `[Fuse] Global : ${produitsGlobaux.length} produits`
         );
-
 
         // ==================================================
         // 5. ENTITIES.FR.JSON
         // ==================================================
 
+        const entitiesPath = path.join(
+            __dirname,
+            "../types/entities.fr.json"
+        );
 
-// ==================================================
-// 5. ENTITIES.FR.JSON
-// ==================================================
+        const entitiesData = JSON.parse(
+            fs.readFileSync(entitiesPath, "utf-8")
+        );
 
-const entitiesPath = path.join(
-    __dirname,
-    "../types/entities.fr.json"
-);
+        const listeEntities: EntityFuse[] = [];
 
-const entitiesData = JSON.parse(
-    fs.readFileSync(
-        entitiesPath,
-        "utf-8"
-    )
-);
+        for (const categorie of entitiesData.categories || []) {
+            for (const produit of categorie.produits || []) {
+                const synonymes: string[] = produit.synonymes || [];
 
-const listeEntities: EntityFuse[] = [];
+                // Nom officiel
+                if (produit.nom) {
+                    listeEntities.push({
+                        synonyme: cleanMessage(produit.nom),
+                        nom: produit.nom
+                    });
+                }
 
-for (const categorie of entitiesData.categories || []) {
-
-    for (const produit of categorie.produits || []) {
-
-        const synonymes = produit.synonymes || [];
-
-        // Nom officiel
-        if (produit.nom) {
-
-            listeEntities.push({
-                synonyme: cleanMessage(produit.nom),
-                nom: produit.nom
-            });
-
-        }
-
-        // Synonymes
-        for (const synonyme of synonymes) {
-
-            if (!synonyme) {
-                continue;
-            }
-
-            listeEntities.push({
-                synonyme: cleanMessage(synonyme),
-                nom: produit.nom
-            });
-
-        }
-    }
-}
-
-if (listeEntities.length > 0) {
-
-    fuseEntities = new Fuse(
-        listeEntities,
-        fuseOptions
-    );
-
-}
-
-console.log(
-    `[Fuse] Entities : ${listeEntities.length} entrées`
-);
-
-
-
-        if (
-            listeEntities.length > 0
-        ) {
-
-            fuseEntities =
-                new Fuse(
-                    listeEntities,
-                    {
-                        keys: ["synonyme"],
-                        threshold: 0.4,
-                        includeScore: true,
-                        minMatchCharLength: 2,
-                        ignoreLocation: true
+                // Synonymes
+                for (const synonyme of synonymes) {
+                    if (!synonyme) {
+                        continue;
                     }
-                );
 
+                    listeEntities.push({
+                        synonyme: cleanMessage(synonyme),
+                        nom: produit.nom
+                    });
+                }
+            }
         }
 
+        if (listeEntities.length > 0) {
+            const entityOptions: Fuse.IFuseOptions<EntityFuse> = {
+                keys: ["synonyme"],
+                threshold: 0.4,
+                includeScore: true,
+                minMatchCharLength: 2,
+                ignoreLocation: true
+            };
+
+            fuseEntities = new Fuse<EntityFuse>(
+                listeEntities,
+                entityOptions
+            );
+        } else {
+            fuseEntities = null;
+        }
 
         console.log(
-            `[Fuse] Entities : ` +
-            `${listeEntities.length} entrées`
+            `[Fuse] Entities : ${listeEntities.length} entrées`
         );
 
-
-        console.log(
-            "[Fuse] Initialisation terminée"
-        );
-
-    }
-    catch (error) {
-
+        console.log("[Fuse] Initialisation terminée");
+    } catch (error) {
         console.error(
             "[Fuse] Erreur lors du chargement :",
             error
         );
 
-
         fuseBusinesses.clear();
-
         fuseGlobal = null;
-
         fuseEntities = null;
 
-
         throw error;
-
-    }
-    finally {
-
+    } finally {
         isLoading = false;
-
     }
 }
-
 
 // ======================================================
 // FUSE BUSINESS
@@ -363,25 +259,18 @@ console.log(
 
 function getBusinessFuse(
     businessId: number | string
-): Fuse<ProduitFuse> | null {
-
-    return (
-        fuseBusinesses.get(
-            String(businessId)
-        ) || null
-    );
-
+): FuseProduit | null {
+    return fuseBusinesses.get(String(businessId)) ?? null;
 }
 
+// ======================================================
+// RECHERCHE FUSE
+// ======================================================
 
-//======================================================
-// 
-//
 function searchFuse<T>(
     fuse: Fuse<T> | null,
     msg: string
-): Fuse.FuseResult<T> | null {
-
+): FuseResult<T> | null {
     if (!fuse) {
         return null;
     }
@@ -390,8 +279,7 @@ function searchFuse<T>(
     // 1. Recherche sur toute la phrase
     // ==========================================
 
-    const fullResult =
-        fuse.search(msg)[0];
+    const fullResult = fuse.search(msg)[0];
 
     if (
         fullResult &&
@@ -401,28 +289,22 @@ function searchFuse<T>(
         return fullResult;
     }
 
-
     // ==========================================
     // 2. Recherche mot par mot
     // ==========================================
 
-    const words =
-        msg
-            .split(/\s+/)
-            .filter(Boolean);
+    const words = msg
+        .split(/\s+/)
+        .filter(Boolean);
 
-    let bestResult:
-        Fuse.FuseResult<T> | null = null;
-
+    let bestResult: FuseResult<T> | null = null;
 
     for (const word of words) {
-
         if (word.length < 2) {
             continue;
         }
 
-        const result =
-            fuse.search(word)[0];
+        const result = fuse.search(word)[0];
 
         if (
             !result ||
@@ -432,64 +314,50 @@ function searchFuse<T>(
         }
 
         if (result.score <= 0.4) {
-
             if (
                 !bestResult ||
-                result.score <
-                (bestResult.score ?? 1)
+                result.score < (bestResult.score ?? 1)
             ) {
                 bestResult = result;
             }
-
         }
     }
-
 
     return bestResult;
 }
 
-
-
 // ======================================================
 // EXTRACTION PRODUIT
 // ======================================================
+
 export function extractProduit(
     message: string,
-    businessId: number
-) {
-
+    businessId: number | string
+): ProduitFuse & {
+    source: "business" | "global" | "entity";
+    score?: number;
+} | null {
     const msg = cleanMessage(message);
 
-    console.log(
-        "[Produit] message :",
-        message
-    );
-
-    console.log(
-        "[Produit] clean :",
-        msg
-    );
+    console.log("[Produit] message :", message);
+    console.log("[Produit] clean :", msg);
 
     if (!msg) {
         return null;
     }
 
-
     // ==========================================
     // 1. BUSINESS
     // ==========================================
 
-    const businessFuse =
-        getBusinessFuse(businessId);
+    const businessFuse = getBusinessFuse(businessId);
 
-    const businessResult =
-        searchFuse(
-            businessFuse,
-            msg
-        );
+    const businessResult = searchFuse(
+        businessFuse,
+        msg
+    );
 
     if (businessResult) {
-
         console.log(
             "[Produit] Business :",
             businessResult
@@ -498,23 +366,20 @@ export function extractProduit(
         return {
             ...businessResult.item,
             source: "business",
-            score: businessResult.score
+            score: Number(businessResult.score),
         };
     }
-
 
     // ==========================================
     // 2. GLOBAL
     // ==========================================
 
-    const globalResult =
-        searchFuse(
-            fuseGlobal,
-            msg
-        );
+    const globalResult = searchFuse(
+        fuseGlobal,
+        msg
+    );
 
     if (globalResult) {
-
         console.log(
             "[Produit] Global :",
             globalResult
@@ -523,23 +388,20 @@ export function extractProduit(
         return {
             ...globalResult.item,
             source: "global",
-            score: globalResult.score
+            score: Number(globalResult.score)
         };
     }
-
 
     // ==========================================
     // 3. ENTITIES JSON
     // ==========================================
 
-    const entityResult =
-        searchFuse(
-            fuseEntities,
-            msg
-        );
+    const entityResult = searchFuse(
+        fuseEntities,
+        msg
+    );
 
     if (entityResult) {
-
         console.log(
             "[Produit] Entity :",
             entityResult
@@ -549,77 +411,31 @@ export function extractProduit(
             ...entityResult.item,
             source: "entity",
             score: entityResult.score
+        } as ProduitFuse & {
+            source: "entity";
+            score?: number;
         };
     }
-
 
     // ==========================================
     // RIEN TROUVÉ
     // ==========================================
 
-    console.log(
-        "[Produit] Aucun produit trouvé"
-    );
+    console.log("[Produit] Aucun produit trouvé");
 
     return null;
 }
-
-
 
 // ======================================================
 // RECHARGEMENT
 // ======================================================
 
-export async function reloadFuseGlobal() {
-
-    console.log(
-        "[Fuse] Rechargement..."
-    );
-
+export async function reloadFuseGlobal(): Promise<void> {
+    console.log("[Fuse] Rechargement...");
 
     fuseBusinesses.clear();
-
     fuseGlobal = null;
-
     fuseEntities = null;
 
-
     await initFuseGlobal();
-
 }
-
-
-/*
-// 6. RELOAD APRES CREATE/UPDATE/DELETE
-export async function reloadFuseGlobal() {
-  fuseInstance = null; // on vide
-  await initFuseGlobal(); // on recharge
-}
-// *2. `server.ts` - LANCER AU DEMARRAGE*
-import { initFuseGlobal } from './entityService';
-
-app.listen(3000, async () => {
-  await initFuseGlobal(); // CHARGER 1 FOIS ICI
-  console.log('Serveur lancé sur 3000');
-});
-
-
-
-
-// *3. `chatController.ts` - UTILISER PARTOUT*
-import { extractProduit, reloadFuseGlobal } from './entityService';
-
-app.post('/chat/message', (req,res) => {
-  const { message, tenantId } = req.body;
-  const entite = extractProduit(message, tenantId); // utilise le même fuse pour tous
-
-  res.json({ entite });
-});
-
-// CRUD
-app.post('/admin/produits', async (req,res) => {
-  await db.query('INSERT...');
-  reloadFuseGlobal(); // recharge en background pour tout le monde
-  res.json({ok: true});
-});
-*/

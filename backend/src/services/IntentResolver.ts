@@ -78,7 +78,7 @@ export class IntentResolver {
                     intentId:intent.id,
 
                     scenarioId:
-                    intent.scenario_id
+                    Number(intent.scenario_id)
                     ??
                     null,
 

@@ -1,4 +1,3 @@
-
 import fs from "fs";
 import path from "path";
 
@@ -6,24 +5,24 @@ import path from "path";
 // CHARGEMENT DES STOPWORDS
 // ======================================================
 
+const stopwordsPath = path.join(
+    __dirname,
+    "../types/stopwords.fr.json"
+);
+
 const stopwordsArray: string[] = JSON.parse(
-    fs.readFileSync(
-        path.join(__dirname, "../types/stopwords.fr.json"),
-        "utf-8"
-    )
+    fs.readFileSync(stopwordsPath, "utf-8")
 );
 
 const STOPWORDS = new Set<string>(
     stopwordsArray.map((mot: string) => mot.toLowerCase())
 );
 
-
 // ======================================================
 // NETTOYAGE DU MESSAGE
 // ======================================================
 
 export function cleanMessage(message: string): string {
-
     return message
         .toLowerCase()
 
@@ -55,7 +54,5 @@ export function cleanMessage(message: string): string {
 
         // Nettoyer les espaces multiples
         .replace(/\s+/g, " ")
-
         .trim();
 }
-

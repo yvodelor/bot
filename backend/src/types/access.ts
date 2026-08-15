@@ -1,13 +1,12 @@
 import { UserPayload } from "../middleware/authMiddleware";
 
 export type AccessConfig = {
-    field?: string;      // ex: user_id, bot.user_id
+    field?: string;
     joins?: string[];
 };
 
-
 export type QueryContext = {
-    user?: UserPayload;  // utilisateur complet
-    userId?: number;     // raccourci pour les requêtes SQL
+    user?: UserPayload | undefined;
+    userId?: number | undefined;
     enableAccess?: boolean;
 };
