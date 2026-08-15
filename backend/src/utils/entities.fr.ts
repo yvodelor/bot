@@ -1,5 +1,23 @@
 
-{
+
+export interface ProductSynonym {
+    nom: string;
+    synonymes: string[];
+}
+
+export interface ProductCategory {
+    categorie: string;
+    produits: ProductSynonym[];
+}
+
+export interface ProductDictionary {
+    version: string;
+    categories: ProductCategory[];
+}
+
+
+
+export const entitiesData = {
   "version": "1.1.0",
   "categories": [
     {
@@ -159,4 +177,4 @@
       ]
     }
   ]
-}
+} as const;

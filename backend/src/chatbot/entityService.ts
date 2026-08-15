@@ -1,9 +1,8 @@
 import Fuse from "fuse.js";
-import fs from "fs";
-import path from "path";
 
 import { produitService } from "../services/produitService";
 import { cleanMessage } from "./cleanMessage";
+import { entitiesData } from "../utils/entities.fr";
 
 // ======================================================
 // TYPES
@@ -178,20 +177,15 @@ export async function initFuseGlobal(): Promise<void> {
         // 5. ENTITIES.FR.JSON
         // ==================================================
 
-        const entitiesPath = path.join(
-            __dirname,
-            "../types/entities.fr.json"
-        );
-
-        const entitiesData = JSON.parse(
-            fs.readFileSync(entitiesPath, "utf-8")
-        );
+      
 
         const listeEntities: EntityFuse[] = [];
 
+
+
         for (const categorie of entitiesData.categories || []) {
             for (const produit of categorie.produits || []) {
-                const synonymes: string[] = produit.synonymes || [];
+                const synonymes: readonly string[] =  produit.synonymes || [];
 
                 // Nom officiel
                 if (produit.nom) {

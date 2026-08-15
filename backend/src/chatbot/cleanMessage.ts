@@ -1,22 +1,10 @@
-import fs from "fs";
-import path from "path";
+import { stopwordsFr } from "../utils/stopwords.fr";
 
 // ======================================================
 // CHARGEMENT DES STOPWORDS
 // ======================================================
 
-const stopwordsPath = path.join(
-    __dirname,
-    "../types/stopwords.fr.json"
-);
-
-const stopwordsArray: string[] = JSON.parse(
-    fs.readFileSync(stopwordsPath, "utf-8")
-);
-
-const STOPWORDS = new Set<string>(
-    stopwordsArray.map((mot: string) => mot.toLowerCase())
-);
+const stopwords = new Set(stopwordsFr);
 
 // ======================================================
 // NETTOYAGE DU MESSAGE
@@ -47,7 +35,7 @@ export function cleanMessage(message: string): string {
         .filter(
             (mot: string) =>
                 mot.length > 1 &&
-                !STOPWORDS.has(mot)
+                !stopwords.has(mot)
         )
 
         .join(" ")
