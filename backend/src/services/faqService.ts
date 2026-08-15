@@ -1,5 +1,5 @@
 import {pool}from "../config/db";
-import { toSql } from "pgvector/pg";
+import { toSql } from "../utils/pgvector";
 import { createBaseService } from "./baseService";
 import { createEmbedding } from "../utils/embedding";
 
@@ -36,7 +36,7 @@ const prepareCreateFaqData = async (
 
   return {
     ...data,
-    embedding: toSql(embedding)
+    embedding: await toSql(embedding)
   };
 };
 
@@ -52,7 +52,7 @@ const prepareUpdateFaqData = async (
 
   return {
     ...data,
-    embedding: toSql(embedding)
+    embedding: await toSql(embedding)
   };
 };
 

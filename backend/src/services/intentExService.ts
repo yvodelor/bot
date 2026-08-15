@@ -1,5 +1,5 @@
 
-import { toSql } from "pgvector/pg";
+import { toSql } from "../utils/pgvector";
 import {pool} from "../config/db";
 import { createBaseService } from "./baseService";
 import { createEmbedding } from "../utils/embedding";
@@ -31,7 +31,7 @@ const prepareCreateData = async (data: CreateIntentEx) :Promise<Omit<IntentEx, "
   console.log('embedding: ', embedding)
   return {
     ...data,
-    embedding: toSql(embedding),
+    embedding: await toSql(embedding),
   };
 };
 
@@ -44,7 +44,7 @@ const prepareUpdateData = async (data: IntentEx): Promise<IntentEx>  => {
   console.log('embedding: ', embedding)
   return {
     ...data,
-    embedding: toSql(embedding),
+    embedding: await toSql(embedding),
   };
 };
 
