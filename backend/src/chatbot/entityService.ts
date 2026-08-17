@@ -88,16 +88,6 @@ export async function initFuseGlobal(): Promise<void> {
         // ==================================================
 
         for (const produit of produits) {
-            /*
-             * La BDD possède :
-             *
-             * id
-             * name
-             * business_id
-             *
-             * Il n'y a PAS de synonymes.
-             */
-
             if (!produit.name) {
                 continue;
             }
@@ -106,34 +96,37 @@ export async function initFuseGlobal(): Promise<void> {
                 synonyme: cleanMessage(produit.name),
                 nom: produit.name,
                 id: produit.id,
-                business_id: Number(produit.business_id) ?? null
+                business_id:
+                    produit.business_id === null ||
+                    produit.business_id === undefined
+                        ? null
+                        : Number(produit.business_id)
             };
 
-            // ==============================================
-            // PRODUIT GLOBAL
-            // ==============================================
+            // ==================================================
+            // 1. TOUS LES PRODUITS → FUSE GLOBAL
+            // ==================================================
+
+            produitsGlobaux.push(entree);
+
+            // ==================================================
+            // 2. PRODUITS DU BUSINESS → FUSE BUSINESS
+            // ==================================================
 
             if (
-                produit.business_id === null ||
-                produit.business_id === undefined
+                produit.business_id !== null &&
+                produit.business_id !== undefined
             ) {
-                produitsGlobaux.push(entree);
-                continue;
+                const businessId = String(produit.business_id);
+
+                if (!produitsParBusiness.has(businessId)) {
+                    produitsParBusiness.set(businessId, []);
+                }
+
+                produitsParBusiness
+                    .get(businessId)!
+                    .push(entree);
             }
-
-            // ==============================================
-            // PRODUIT BUSINESS
-            // ==============================================
-
-            const businessId = String(produit.business_id);
-
-            if (!produitsParBusiness.has(businessId)) {
-                produitsParBusiness.set(businessId, []);
-            }
-
-            produitsParBusiness
-                .get(businessId)!
-                .push(entree);
         }
 
         // ==================================================
