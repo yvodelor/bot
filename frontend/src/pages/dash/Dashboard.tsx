@@ -5,9 +5,6 @@ import { getDashboard } from "../../api/dashboard.api";
 import PageMeta from "../../components/common/PageMeta";
 
 
-import { Dropdown } from "../../components/dropdown/Dropdown";
-import { DropdownItem } from "../../components//dropdown/DropdownItem";
-
 import {
   ResponsiveContainer,
   BarChart,
