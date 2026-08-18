@@ -196,51 +196,6 @@ export default function Dashboard() {
             <span>⌄</span>
           </button>
 
-
-
-          {/* Contenu du dropdown */}
-          <Dropdown
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-          >
-
-            <div className="w-52 py-2">
-
-
-              <DropdownItem
-                tag="a"
-                to="/profile"
-                onItemClick={() => setIsOpen(false)}
-              >
-                Mon profil
-              </DropdownItem>
-
-
-
-              <DropdownItem
-                tag="a"
-                to="/settings"
-                onItemClick={() => setIsOpen(false)}
-              >
-                Paramètres
-              </DropdownItem>
-
-
-
-              <DropdownItem
-                onClick={() => {
-                  console.log("Déconnexion");
-                  setIsOpen(false);
-                }}
-              >
-                Déconnexion
-              </DropdownItem>
-
-
-            </div>
-
-          </Dropdown>
-
         </div>
       </div>
 
