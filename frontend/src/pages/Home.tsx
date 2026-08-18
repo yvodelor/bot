@@ -171,15 +171,15 @@ console.log('api-pl', apiUrl);
         <h4 className="text-2xl font-bold">Starter</h4>
 
         <p className="text-5xl font-bold my-4">
-          15€
+          Free
           <span className="text-lg font-normal text-gray-500">/mois</span>
         </p>
 
         <ul className="space-y-3 mt-8 text-gray-700">
           <li>✅ 2 000 messages/mois</li>
-          <li>✅ 1 chatbot</li>
+          <li>✅ 3 produits</li>
           <li>✅ Réponse standard</li>
-          <li>✅ FAQ illimitée</li>
+          <li>✅ FAQ limitée</li>
           <li>✅ 10 scénarios</li>
           <li>✅ Widget Web</li>
           <li>❌ WhatsApp</li>
@@ -202,13 +202,13 @@ console.log('api-pl', apiUrl);
         <h4 className="text-2xl font-bold mt-4">Pro</h4>
 
         <p className="text-5xl font-bold my-4">
-          49€
+          2500F
           <span className="text-lg font-normal">/mois</span>
         </p>
 
         <ul className="space-y-3 mt-8">
           <li>✅ 20 000 messages/mois</li>
-          <li>✅ 5 chatbots</li>
+          <li>✅ 50 Produits</li>
           <li>✅ Réponse rapide</li>
           <li>✅ FAQ illimitée</li>
           <li>✅ Scénarios illimités</li>
@@ -229,13 +229,13 @@ console.log('api-pl', apiUrl);
         <h4 className="text-2xl font-bold">Entreprise</h4>
 
         <p className="text-5xl font-bold my-4">
-          99€
+          7500€
           <span className="text-lg font-normal text-gray-500">/mois</span>
         </p>
 
         <ul className="space-y-3 mt-8 text-gray-700">
           <li>✅ Messages illimités</li>
-          <li>✅ Chatbots illimités</li>
+          <li>✅ Produits illimités</li>
           <li>✅ Réponse ultra rapide</li>
           <li>✅ IA avancée</li>
           <li>✅ Scénarios illimités</li>

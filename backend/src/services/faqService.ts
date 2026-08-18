@@ -21,7 +21,16 @@ type CreateFaq = Omit<Faq, "id" | "embedding">;
 const base = createBaseService<Faq>(
   pool,
   'faq',
-  ["id", "embedding"]
+  ["id", "embedding", "business_id"],
+  {
+    joins: [
+        `
+        JOIN business
+        ON produit.business_id = business.id
+        `
+    ],
+    field: "business.user_id"
+}
 );
 
 

@@ -168,13 +168,13 @@ const appRoutes: AppRoute[] = [
     // ==================================================
 
     {
-        path: "/produits",
+        path: "/produits/business/:businessId",
         element: <ProduitPage />,
         protected: true
     },
 
     {
-        path: "/produit",
+        path: "/produit/business/:businessId",
         element: <ProduitCreate />,
         protected: true
     },
@@ -197,13 +197,13 @@ const appRoutes: AppRoute[] = [
     // ==================================================
 
     {
-        path: "/faqs/",
+        path: "/faqs/business/:businessId",
         element: <Faq />,
         protected: true
     },
 
     {
-        path: "/faq/",
+        path: "/faq/business/:businessId",
         element: <FaqCreate />,
         protected: true
     },

@@ -1,7 +1,7 @@
 // src/pages/business/index.tsx
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,  useParams } from "react-router-dom"; 
 import { type Produit, produitApi } from "../../../api/produit.api";
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
@@ -41,13 +41,15 @@ const ProduitPage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
+   const { businessId } = useParams()
+   
   /* =========================
      FETCH DATA
   ========================= */
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await produitApi.getAll();
+        const res = await produitApi.getByField('business_id', Number(businessId));
 
         console.log("🔥 RESPONSE BUSINESSES:", res);
 

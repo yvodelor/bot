@@ -9,6 +9,10 @@ type ApiResponse<T> = {
 type CrudApi<T extends { id: string | number }> = {
   getAll: () => Promise<T[]>;
   getById: (id: T["id"]) => Promise<T | null>;
+  getByField: (
+    field: string,
+    value: string | number
+  ) => Promise<T[]>;
   create: (data: Omit<T, "id"> | FormData) => Promise<T>;
   update: (
     id: T["id"],
@@ -39,6 +43,28 @@ export const createCrudApi = <T extends { id: string | number }>(
         console.error(e);
         throw e;
       }
+    },
+
+    // ======================================================
+    // GET BY FIELD
+    // ======================================================
+
+    getByField: async (
+      field,
+      value
+    ): Promise<T[]> => {
+      const res =
+        await client.get<ApiResponse<T[]>>(
+          `${baseUrl}/by`,
+          {
+            params: {
+              field,
+              value,
+            },
+          }
+        );
+
+      return res.data.data;
     },
 
     create: async (data): Promise<T> => {

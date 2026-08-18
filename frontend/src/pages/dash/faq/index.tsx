@@ -1,11 +1,10 @@
 // src/pages/business/index.tsx
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,  useParams } from "react-router-dom"; 
 import { type Faq, faqApi } from "../../../api/faq.api";
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
-
 import DashLayout from "../../../layouts/DashLayout";
 import { DynamicTable} from "../../../components/tables/DynamicTable";
 import type{ Column } from "../../../components/tables/DynamicTable";
@@ -20,18 +19,7 @@ import {Edit, Trash2, BookOpen} from 'lucide-react'
 ========================= */
 
 const  FaqCols:  Column<Faq>[] = [
-  {
-    key: 'id',
-    header: 'Faq',
-    sortable: true,
-  },
 
-  {
-    key: 'business_id',
-    header: 'Agent ia',
-    sortable: true,
-  },
- 
   {
     key: 'question',
     header: 'Question',
@@ -57,13 +45,16 @@ const [faqs, setFaqs] = useState<Faq[]>([]);
 const [loading, setLoading] = useState<boolean>(true);
 const [error, setError] = useState<string>("");
 
+const { businessId } = useParams()
+   
+
   /* =========================
     FETCH DATA
   ========================= */
   useEffect(() => {
     const fetchFaqs = async () => {
       try {
-        const res = await faqApi.getAll();
+        const res = await faqApi.getByField('business_id', Number(businessId));
 
         console.log("🔥 RESPONSE Faqdefault:", res);
 

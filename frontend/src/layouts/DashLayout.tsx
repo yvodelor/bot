@@ -42,7 +42,7 @@ const menuItems: MenuItem[] = [
   },
 
   {
-    title: "Businesses",
+    title: "Structures",
     icon: LayoutDashboard,
     link: "/businesses",
   },

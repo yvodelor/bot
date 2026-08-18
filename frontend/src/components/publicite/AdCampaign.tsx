@@ -16,6 +16,7 @@ export interface AdCampaignProps {
   imageUrl?: string;
   linkUrl: string;
   badgeText?: string;
+  action?: string;
   isDismissible?: boolean;
   onClose?: (id: string) => void;
 }
@@ -29,6 +30,7 @@ export const AdCampaign: React.FC<AdCampaignProps> = ({
   imageUrl,
   linkUrl,
   badgeText = 'SPONSORISÉ',
+  action,
   isDismissible = true,
   onClose,
 }) => {
@@ -53,7 +55,7 @@ export const AdCampaign: React.FC<AdCampaignProps> = ({
           <div className="flex-1 text-center">
             <span>{description} </span>
             <a href={linkUrl} target="_blank" rel="noopener noreferrer" className="underline hover:text-black">
-              {title || 'Cliquez ici'}
+              {title || action || 'Cliquez ici'}
             </a>
           </div>
           {isDismissible && (
@@ -136,7 +138,7 @@ export const AdCampaign: React.FC<AdCampaignProps> = ({
             rel="noopener noreferrer" 
             className="text-xs font-semibold text-blue-600 hover:underline shrink-0"
           >
-            Découvrir
+            {action || 'Découvrir' }
           </a>
         </div>
       );

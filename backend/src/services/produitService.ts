@@ -14,7 +14,7 @@ type Produit = {
 const baseService = createBaseService<Produit>(
     pool,
     'produit',
-    ['id', 'name'],
+    ['id', 'name', 'business_id'],
     {
         joins: [
             `
