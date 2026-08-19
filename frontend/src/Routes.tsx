@@ -180,17 +180,12 @@ const appRoutes: AppRoute[] = [
     },
 
     {
-        path: "/produit/:id",
+        path: "/produit/:id/business/:businessId",
         element: <ProduitCreate />,
         protected: true
     },
 
-    {
-        path: "/product/business/:businessId",
-        element: <ProduitPage />,
-        protected: true
-    },
-
+ 
 
     // ==================================================
     // FAQ
@@ -203,19 +198,13 @@ const appRoutes: AppRoute[] = [
     },
 
     {
-        path: "/faq/business/:businessId",
+        path: "/faq/:id/business/:businessId",
         element: <FaqCreate />,
         protected: true
     },
 
     {
-        path: "/faq/:id",
-        element: <FaqCreate />,
-        protected: true
-    },
-
-    {
-        path: "/faq/business/:businessId",
+        path: "/faq/:id/business/:businessId",
         element: <FaqCreate />,
         protected: true
     },

@@ -22,7 +22,7 @@ import TextArea from "../../../components/form/input/TextArea";
 
 
 export default function BusinessCreate() {
-  const { id } = useParams()
+  const { id, businessId } = useParams()
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [files, setFiles] = useState<File[]>([]);
  
@@ -117,7 +117,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       await produitApi.create(data);
     }
 
-    navigate('/produits');
+    navigate(`/produits/business/${businessId}`);
 
   } catch(error: any){
     console.log(error.response?.data);
@@ -131,7 +131,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       <PageMeta
         title={isEdit ? "Modifier un agent" : "Créer un agent"} 
        
-        description="This is React.js Form Elements  Dashboard page for TailAdmin - React.js Tailwind CSS Admin Dashboard Template"
+        description=""
       />
       <PageBreadcrumb pageTitle="Agent IA" />
 

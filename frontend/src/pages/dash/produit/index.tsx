@@ -20,7 +20,13 @@ const  ProduitCols:  Column<Produit>[] = [
  
   {
     key: 'name',
-    header: 'Produit/Service',
+    header: 'Produits',
+    sortable: true,
+  },
+
+  {
+    key: 'prix',
+    header: 'Prix',
     sortable: true,
   },
 
@@ -28,7 +34,10 @@ const  ProduitCols:  Column<Produit>[] = [
     key: 'image',
     header: 'Image',
     render:(_value, row) => (
-      <img src={row.image} />
+      <img
+        src={`${import.meta.env.VITE_BACKEND_URL}${row.image}`}
+        alt={row.name || "Produit"}
+      />
    )
   },
 ];
@@ -42,6 +51,8 @@ const ProduitPage = () => {
   const [error, setError] = useState<string>("");
 
    const { businessId } = useParams()
+
+   
    
   /* =========================
      FETCH DATA
@@ -109,8 +120,8 @@ const ProduitPage = () => {
     <DashLayout>
       
       <PageMeta
-        title="Produit et Services"
-        description="Tous vos produits et services"
+        title="Produit"
+        description="Tous vos produits"
       />
       <PageBreadcrumb pageTitle="Produit et services" />
 
@@ -120,9 +131,9 @@ const ProduitPage = () => {
       >
         <div>
           <div>
-            <div className="flex justify-end">
+            <div className="flex justify-end m-1">
               <Button size="sm" variant="primary" className="bg-gray-600">
-                <a href = "/produit">Ajouter un produit</a>
+                <Link to = {`/produit/business/${businessId}`}>Ajouter un produit</Link>
               </Button>
             </div>
           </div>
@@ -134,7 +145,7 @@ const ProduitPage = () => {
               <div className="flex gap-1 justify-end">
                 {/* Editer */}
                 <Button  size="sm" variant="primary" className="bg-green-600 px-0 py-0">
-                  <Link to = {`/produit/${produit.id}`}> <div className="flex gap-1 justify-end"><Edit  size="15"/> Editer</div></Link>
+                  <Link to = {`/produit/${produit.id}/business/${businessId}`}> <div className="flex gap-1 justify-end"><Edit  size="15"/></div></Link>
                 </Button> 
 
                 {/* Suppression */}

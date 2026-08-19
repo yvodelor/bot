@@ -199,7 +199,7 @@ export default function BusinessCreate() {
 
       <ComponentCard  
         title={isEdit ? "Modifier" : "Créer"}
-        desc = "Ajouter une Question"
+        desc = ""
       >  
 
         {error && (

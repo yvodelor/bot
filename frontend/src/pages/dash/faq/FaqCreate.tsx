@@ -52,7 +52,7 @@ export default function Faq() {
         await faqApi.create(form)
       }
 
-      navigate('/faqs')
+      navigate(`/faqs/business/${businessId}`)
 
     } catch(err){
       console.log(err)
@@ -69,6 +69,8 @@ export default function Faq() {
         description="Foire aux questions"
       />
       <PageBreadcrumb pageTitle="Agent IA" />
+
+      
 
       <ComponentCard  
         title="Modifier Créer"

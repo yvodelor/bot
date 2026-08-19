@@ -13,7 +13,7 @@ import ComponentCard from "../../../components/common/ComponentCard";
 
 
 
-import {Edit, Trash2, BookOpen} from 'lucide-react'
+import {Edit, Trash2, BookOpen, Plus} from 'lucide-react'
 /* =========================
    TYPE (sans ORM)
 ========================= */
@@ -127,10 +127,15 @@ const { businessId } = useParams()
         description="Tous vos faq"
       />
       <PageBreadcrumb pageTitle="Faq" />
-
+        <div className="flex justify-end m-2">
+          <Button size="sm" variant="primary" className="bg-gray-600">
+            <Link to = {`/faq/business/${businessId}`}>Ajouter un faq</Link>
+          </Button>
+        </div>
+          
       <ComponentCard  
         title="Foire aux questions"
-        desc = "Vous pouvez ajouter des questions reponses pour permettreà vos agent de mieux repondre"
+        desc = "Vous pouvez ajouter des questions reponses pour permettre à vos agent de mieux repondre"
       >
         <div>
           
@@ -141,7 +146,7 @@ const { businessId } = useParams()
               
               <div className="flex gap-1 justify-end">
                 <Button  size="sm" variant="primary" className="bg-green-600 px-0 py-0">
-                  <a href = {`/faq/${faq.id}`}><Edit  size="15"/></a>
+                  <a href = {`/faq/${faq.id}/business/${businessId}`}><Edit  size="15"/></a>
                 </Button> 
                 <Button  size ="sm" variant="primary" onClick={() =>handleDelete(faq.id)} className="bg-red-600 px-2">
                   <Trash2  size="15"/>

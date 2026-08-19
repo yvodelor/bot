@@ -27,7 +27,7 @@ console.log('api-pl', apiUrl);
             <div className="flex items-center gap-2">
               <img
                 src="/logo.png"
-                alt="ConversaAI"
+                alt="Sickabot ai"
                 className="h-10 w-auto"
               />
               
@@ -90,7 +90,8 @@ console.log('api-pl', apiUrl);
             </p>
 
             <div className="mt-8 flex gap-4">
-              <button className="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700">
+              <button  
+               className="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700">
                 Essayer gratuitement
               </button>
 
@@ -180,7 +181,7 @@ console.log('api-pl', apiUrl);
           <li>✅ 3 produits</li>
           <li>✅ Réponse standard</li>
           <li>✅ FAQ limitée</li>
-          <li>✅ 10 scénarios</li>
+        
           <li>✅ Widget Web</li>
           <li>❌ WhatsApp</li>
           <li>❌ Telegram</li>
@@ -208,14 +209,15 @@ console.log('api-pl', apiUrl);
 
         <ul className="space-y-3 mt-8">
           <li>✅ 20 000 messages/mois</li>
-          <li>✅ 50 Produits</li>
+          <li>✅ 20 Produits</li>
           <li>✅ Réponse rapide</li>
           <li>✅ FAQ illimitée</li>
-          <li>✅ Scénarios illimités</li>
+          <li>✅ réponse intelligente</li>
           <li>✅ Widget Web</li>
           <li>✅ Telegram</li>
-          <li>✅ WhatsApp</li>
-          <li>✅ API REST</li>
+          <li>❌ WhatsApp</li>
+          
+          <li>❌ API REST</li>
           <li>Support prioritaire</li>
         </ul>
 
@@ -229,7 +231,7 @@ console.log('api-pl', apiUrl);
         <h4 className="text-2xl font-bold">Entreprise</h4>
 
         <p className="text-5xl font-bold my-4">
-          7500€
+          7000F
           <span className="text-lg font-normal text-gray-500">/mois</span>
         </p>
 
@@ -238,11 +240,12 @@ console.log('api-pl', apiUrl);
           <li>✅ Produits illimités</li>
           <li>✅ Réponse ultra rapide</li>
           <li>✅ IA avancée</li>
-          <li>✅ Scénarios illimités</li>
+        
           <li>✅ Toutes les intégrations</li>
           <li>✅ API complète</li>
           <li>✅ Hébergement dédié</li>
           <li>✅ Tableau de bord avancé</li>
+          <li>✅ Documents intégés</li>
           <li>✅ Support 24/7</li>
         </ul>
 

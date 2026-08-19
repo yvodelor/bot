@@ -279,7 +279,7 @@ const BusinessPage = () => {
             </div>
           </div>
 
-          <Link to="/business" className="w-full sm:w-auto">
+          <Link to="/business" className="w-full sm:wauto">
             <Button
               size="sm"
               variant="primary"
@@ -510,7 +510,7 @@ const BusinessPage = () => {
 
                             <DropdownItem
                               tag="a"
-                              to={`/faq/business/${business.id}`}
+                              to={`/channel/business/${business.id}`}
                               onItemClick={() => setOpenDropdownId(null)}
                             >
                               <div className="flex items-center gap-3">
