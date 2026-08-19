@@ -13,7 +13,7 @@ import ComponentCard from "../../../components/common/ComponentCard";
 
 
 
-import {Edit, Trash2, BookOpen, Plus} from 'lucide-react'
+import {Edit, Trash2, BookOpen } from 'lucide-react'
 /* =========================
    TYPE (sans ORM)
 ========================= */
