@@ -32,16 +32,20 @@ const ChatbotsPage = () => {
 
   if (loading) {
     return (
-      <div className="p-6">
-        <p>⏳ Chargement des chatbots...</p>
+      <div className="min-h-screen bg-gray-50">
+        <div className="p-6">
+          <p>⏳ Chargement des chatbots...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="p-6">
-        <p className="text-red-500">{error}</p>
+      <div className="min-h-screen bg-gray-50">
+        <div className="p-6">
+          <p className="text-red-500">{error}</p>
+        </div>
       </div>
     );
   }
@@ -49,71 +53,303 @@ const ChatbotsPage = () => {
   return (
     <>
       <PageMeta
-        title="Liste des chatbots"
-        description="Découvrez les chatbots disponibles"
+        title="Chatbots disponibles"
+        description="Découvrez les chatbots disponibles sur Sickabot"
       />
 
-      <PageBreadcrumb pageTitle="Chatbots disponibles" />
+      {/* =========================================
+          ENTÊTE
+      ========================================= */}
+      <header className="border-b border-gray-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
 
-      <div className="p-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-semibold">
-            Chatbots disponibles
-          </h1>
+          <div className="flex items-center justify-between">
 
-          <p className="mt-1 text-gray-500">
-            Choisissez un chatbot pour commencer une conversation.
-          </p>
-        </div>
-
-        {chatbots.length === 0 ? (
-          <div className="rounded-xl border border-gray-200 bg-white p-8 text-center">
-            <p className="text-gray-500">
-              Aucun chatbot disponible pour le moment.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {chatbots.map((chatbot) => (
+            {/* LOGO */}
+            <Link
+              to="/"
+              className="flex items-center gap-3"
+            >
               <div
-                key={chatbot.id}
-                className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
+                className="
+                  flex
+                  h-16
+                  w-16
+                  items-center
+                  justify-center
+                  rounded-xl
+                 
+                  text-xl
+                  shadow-sm
+                "
               >
-                <div className="mb-4 flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-xl">
-                    🤖
-                  </div>
+                <img
+                    src="/logo.png"
+                    alt="Sickabot ai"
+                    className="h-10 w-auto"
+                />
+              </div>
 
-                  <div>
-                    <h2 className="font-semibold text-gray-900">
-                      {chatbot.name}
-                    </h2>
+             
+            </Link>
 
-                    {chatbot.agent_name && (
-                      <p className="text-sm text-gray-500">
-                        {chatbot.agent_name}
-                      </p>
-                    )}
-                  </div>
+            {/* ACTION */}
+            <div>
+              <Link
+                to="/chatbot"
+                className="
+                  rounded-lg
+                  border
+                  border-gray-200
+                  bg-white
+                  px-4
+                  py-2
+                  text-sm
+                  font-medium
+                  text-gray-700
+                  transition
+                  hover:bg-gray-50
+                "
+              >
+                Chatbots
+              </Link>
+            </div>
+
+          </div>
+
+        </div>
+      </header>
+
+      {/* =========================================
+          CONTENU
+      ========================================= */}
+      <main className="min-h-screen bg-gray-50">
+
+        <PageBreadcrumb pageTitle="Chatbots disponibles" />
+
+        {/* =========================================
+            HERO / ENTÊTE DE PAGE
+        ========================================= */}
+        <section className="px-4 pb-8 pt-8 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+
+            <div
+              className="
+                overflow-hidden
+                rounded-2xl
+                bg-gradient-to-r
+                from-blue-600
+                to-indigo-600
+                px-6
+                py-10
+                text-white
+                shadow-lg
+                sm:px-10
+                lg:px-12
+              "
+            >
+              <div className="max-w-3xl">
+
+                <div
+                  className="
+                    mb-4
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    bg-white/10
+                    px-3
+                    py-1.5
+                    text-xs
+                    font-medium
+                    backdrop-blur-sm
+                  "
+                >
+                  <span className="h-2 w-2 rounded-full bg-green-400" />
+                  Assistants disponibles
                 </div>
 
-                {chatbot.description && (
-                  <p className="mb-5 line-clamp-3 text-sm text-gray-600">
-                    {chatbot.description}
-                  </p>
-                )}
-
-                <Link
-                  to={`/chatbot/${chatbot.slug}`}
-                  className="block w-full rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white transition hover:bg-blue-700"
+                <h2
+                  className="
+                    text-3xl
+                    font-bold
+                    tracking-tight
+                    sm:text-4xl
+                    lg:text-5xl
+                  "
                 >
-                  💬 Discuter avec ce chatbot
-                </Link>
+                  Trouvez le chatbot
+                  <br className="hidden sm:block" />
+                  dont vous avez besoin
+                </h2>
+
+                <p
+                  className="
+                    mt-4
+                    max-w-2xl
+                    text-sm
+                    leading-6
+                    text-blue-100
+                    sm:text-base
+                  "
+                >
+                  Découvrez nos assistants intelligents et échangez
+                  directement avec eux pour obtenir des informations,
+                  des conseils ou de l'aide.
+                </p>
+
+                
               </div>
-            ))}
+            </div>
+
           </div>
-        )}
-      </div>
+        </section>
+
+        {/* =========================================
+            LISTE DES CHATBOTS
+        ========================================= */}
+        <section className="px-4 pb-12 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+
+         
+
+            {chatbots.length === 0 ? (
+              <div
+                className="
+                  rounded-2xl
+                  border
+                  border-gray-200
+                  bg-white
+                  p-10
+                  text-center
+                  shadow-sm
+                "
+              >
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gray-100 text-2xl">
+                  🤖
+                </div>
+
+                <h3 className="font-semibold text-gray-900">
+                  Aucun chatbot disponible
+                </h3>
+
+                <p className="mt-1 text-sm text-gray-500">
+                  Aucun assistant n'est actuellement disponible.
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+
+                {chatbots.map((chatbot) => (
+                  <div
+                    key={chatbot.id}
+                    className="
+                      group
+                      rounded-2xl
+                      border
+                      border-gray-200
+                      bg-white
+                      p-5
+                      shadow-sm
+                      transition
+                      duration-200
+                      hover:-translate-y-1
+                      hover:shadow-lg
+                    "
+                  >
+
+                    {/* CHATBOT HEADER */}
+                    <div className="mb-4 flex items-center gap-4">
+
+                      <div
+                        className="
+                          flex
+                          h-14
+                          w-14
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-xl
+                          bg-blue-50
+                          text-2xl
+                          transition
+                          group-hover:bg-blue-100
+                        "
+                      >
+                        🤖
+                      </div>
+
+                      <div className="min-w-0">
+
+                        <h4 className="truncate font-semibold text-gray-900">
+                          {chatbot.name}
+                        </h4>
+
+                        {chatbot.agent_name && (
+                          <p className="truncate text-sm text-gray-500">
+                            {chatbot.agent_name}
+                          </p>
+                        )}
+
+                      </div>
+
+                    </div>
+
+                    {/* DESCRIPTION */}
+                    <div className="min-h-[72px]">
+
+                      {chatbot.description ? (
+                        <p className="line-clamp-3 text-sm leading-6 text-gray-600">
+                          {chatbot.description}
+                        </p>
+                      ) : (
+                        <p className="text-sm italic text-gray-400">
+                          Assistant intelligent disponible pour répondre
+                          à vos questions.
+                        </p>
+                      )}
+
+                    </div>
+
+                    {/* BUTTON */}
+                    <div className="mt-5">
+
+                      <Link
+                        to={`/chatbot/${chatbot.slug}`}
+                        className="
+                          block
+                          w-full
+                          rounded-xl
+                          bg-blue-600
+                          px-4
+                          py-2.5
+                          text-center
+                          text-sm
+                          font-medium
+                          text-white
+                          transition
+                          hover:bg-blue-700
+                          focus:outline-none
+                          focus:ring-2
+                          focus:ring-blue-500
+                          focus:ring-offset-2
+                        "
+                      >
+                        💬 Discuter avec ce chatbot
+                      </Link>
+
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
+            )}
+
+          </div>
+        </section>
+
+      </main>
     </>
   );
 };

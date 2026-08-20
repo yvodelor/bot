@@ -91,6 +91,7 @@ const menuItems: MenuItem[] = [
 
       { title: "Scenario_intent", link: "/admin/scenario_intents" },
       { title: "Ads", link: "/admin/ads" },
+      { title: "Chats inconnus", link: "/admin/chatnos" },
   
       
     ],
