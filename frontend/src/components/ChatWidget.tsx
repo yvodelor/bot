@@ -556,7 +556,7 @@ export const ChatWidget = ({
                                         overflow-hidden
                                     "
                                 >
-                                    {ads.sidebar?.[0] && (
+                                    {ads.bottom_sheet[0] && (
                                         <AdCampaign
                                             id="ad-4"
                                             type="chat-bottom-banner"
