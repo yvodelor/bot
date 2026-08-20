@@ -1,9 +1,8 @@
 // src/pages/business/index.tsx
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import {type Ad, adApi} from "../../../api/ad.api"
 
+import {type ChatNo, chatNoApi} from "../../../api/chatNo.api"
 
 import PageMeta from "../../../components/common/PageMeta";
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
@@ -16,19 +15,37 @@ import ComponentCard from "../../../components/common/ComponentCard";
 
 
 
-import {Edit, Trash2} from 'lucide-react'
+import {Trash2} from 'lucide-react'
 /* =========================
    TYPE (sans ORM)
 ========================= */
 
 
+const  ChatNoCols:  Column<ChatNo>[] = [ 
+  {
+    key: 'message',
+    header: 'Mesaage',
+    sortable: true,
+  },
+  {
+    key: 'business_id',
+    header: 'business_id',
+    sortable: true,
+  },
+  {
+    key: 'intent_id',
+    header: 'intent_id',
+    sortable: true,
+  },
 
 
 
+];
 
-const Ads = () => {
 
-  const [ads, setAds] = useState<Ad[]>([]);
+
+const chatUnknown = () => {
+  const [chatNos, setChatNos] = useState<ChatNo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
 
@@ -38,9 +55,9 @@ const Ads = () => {
   useEffect(() => {
     async function load(){
       try{
-        const rep = await adApi.getAll()
+        const rep = await chatNoApi.getAll()
         console.log(rep);
-        setAds(rep)
+        setChatNos(rep)
       }catch(error){
         console.log('Erreur');
       } finally{
@@ -51,50 +68,9 @@ const Ads = () => {
   }, [])
   
 
-
-
-const  AdsCols:  Column<Ad>[] = [ 
-  {
-    key: 'id',
-    header: 'Id',
-    sortable: true,
-  },
-
-  {
-    key: 'title',
-    header: 'Titre',
-    sortable: true,
-  },
-
-  {
-    key: 'placement',
-    header: 'Placement',
-    sortable: true,
-  },
-
-  {
-    key: 'start_date',
-    header: 'Debut',
-    sortable: true,
-  },
-
-  {
-    key: 'end_date',
-    header: 'Fin',
-    sortable: true,
-  
-  },
-
-];
-
-
-
-
-
   /* =========================
      DELETE BUSINESS
-  =========================  */
-
+  ========================= */
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
       "Voulez-vous supprimer cette reponse?"
@@ -103,9 +79,9 @@ const  AdsCols:  Column<Ad>[] = [
     if (!confirmDelete) return;
 
     try {
-      await adApi.delete(id);
+      await chatNoApi.delete(id);
 
-      setAds((prev) =>
+      setChatNos((prev) =>
         prev.filter((b) => b.id !== id)
       );
 
@@ -123,6 +99,9 @@ const  AdsCols:  Column<Ad>[] = [
     return <p>⏳ Chargement...</p>;
   }
 
+  /* =========================
+     ERROR
+  ========================= */
 
 
 
@@ -146,27 +125,18 @@ const  AdsCols:  Column<Ad>[] = [
         desc = "Ajouter une Question"
       >
         <div>
-          <div>
-            <div className="flex justify-end">
-              <Button size="sm" variant="primary" className="bg-gray-600">
-                <Link to = "/admin/ad">Ajouter ad</Link>
-              </Button>
-            </div>
-          </div>
+          
           <DynamicTable 
-            data={ads} 
-            columns={ AdsCols }
-            actions={(ad) => (
+            data={chatNos} 
+            columns={ ChatNoCols }
+            actions={(chatNo) => (
               
               <div className="flex gap-1 justify-end">
-                <Button  size="sm" variant="primary" className="bg-green-600 px-0 py-0">
-                  <Link to = {`/admin/ad/${ad.id}`}><Edit  size="15"/></Link>
-                </Button> 
                
-                <Button  size ="sm" variant="primary" onClick={() =>handleDelete(ad.id)} className="bg-red-600 px-2">
+                <Button  size ="sm" variant="primary" onClick={() =>handleDelete(chatNo.id)} className="bg-red-600 px-2">
                   <Trash2  size="15"/>
                 </Button>
-               
+                
               </div>
             )}
               
@@ -179,4 +149,4 @@ const  AdsCols:  Column<Ad>[] = [
   );
 };
 
-export default Ads;
+export default chatUnknown;

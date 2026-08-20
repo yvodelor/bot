@@ -321,7 +321,7 @@ export default function BusinessCreate() {
                   onChange={(e) => setForm({ ...form, horaire: e.target.value })}
                 />
               </div>
-              <div className="col-span-12 md:col-span-6">
+              <div className="col-span-12 md:col-span-12">
                 <Label>Email</Label>
                 <Inputfield
                   name="email"
@@ -339,7 +339,7 @@ export default function BusinessCreate() {
                 )}
 
               </div>
-              <div className="col-span-6">
+              <div className="col-span-12">
                 <Label>Site web</Label>
                 <Inputfield
                   name="website"
@@ -349,7 +349,7 @@ export default function BusinessCreate() {
                 />
               </div>
               
-              <div className="col-span-6">
+              <div className="col-span-12">
                 <Label>Adresse</Label>
                 <TextArea
                   name="address"
@@ -358,7 +358,7 @@ export default function BusinessCreate() {
                   rows={3}
                 />
               </div>
-              <div className=" col-span-6">
+              <div className=" col-span-12">
                 <Label>Description</Label>
                 <TextArea
                   name="description"

@@ -17,5 +17,10 @@ router.get(
     publicBusinessController.getById
 );
 
+router.get(
+    "/public/chatbots",
+    publicBusinessController.getPublicChatbot
+);
+
 
 export default router;

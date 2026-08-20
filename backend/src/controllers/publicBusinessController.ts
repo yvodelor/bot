@@ -161,7 +161,32 @@ export const publicBusinessController = {
     },
 
 
+    // GET /public/chatbots
+    getPublicChatbot: async (
+        req: Request,
+        res: Response
+    ) => {
+        try {
+            const chatbots = await businessService.getAll({
+                enableAccess: false
+            });
 
+            return res.json({
+                success: true,
+                data: chatbots
+            });
 
+        } catch (error) {
+            console.error(
+                "Erreur récupération chatbots publics :",
+                error
+            );
+
+            return res.status(500).json({
+                success: false,
+                message: "Erreur serveur"
+            });
+        }
+    }
 
 };

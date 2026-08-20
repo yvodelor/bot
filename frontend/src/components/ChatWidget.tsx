@@ -66,6 +66,7 @@ export const ChatWidget = ({
         loadAds();
     }, []);
 
+    console.log(ads)
     /*
      * Envoi du message
      */
@@ -238,15 +239,9 @@ export const ChatWidget = ({
                                 <AdCampaign
                                     id="ad-1"
                                     type="top-banner"
-                                    description={
-                                        ads.top_banner[0].description
-                                    }
-                                    linkUrl={
-                                        ads.top_banner[0].target_url
-                                    }
-                                    title={
-                                        ads.top_banner[0].title
-                                    }
+                                    description={  ads.top_banner[0].description  }
+                                    linkUrl={ ads.top_banner[0].target_url  }
+                                    title={ ads.top_banner[0].title  }
                                 />
                             )}
                         </div>
@@ -463,35 +458,41 @@ export const ChatWidget = ({
                             >
                                 <div className="p-3 sm:p-4">
 
-                                    <div className="mb-3">
-                                        <span className="text-xs font-bold text-gray-400">
-                                            SPONSORISÉ
-                                        </span>
-                                    </div>
+                                {ads.sidebar && ads.sidebar.length > 0 && (
+                                <>
+                                <div className="mb-3">
+                                    <span className="text-xs font-bold text-gray-400">
+                                    SPONSORISÉ
+                                    </span>
+                                </div>
 
-                                    <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-2 gap-3">
 
-                                        <div className="min-w-0">
-                                            <AdCampaign
-                                                id="ad-2a"
-                                                type="sidebar-card"
-                                                title="Cloud Storage Services"
-                                                imageUrl="https://via.placeholder.com/150"
-                                                linkUrl="https://example.com"
-                                            />
-                                        </div>
+                                {ads.sidebar
+                                .filter((ad) => ad && ad.title && ad.target_url)
+                                .slice(0, 2)
+                                .map((ad, index) => (
+                                <div
+                                key={ad.id ?? `sidebar-ad-${index}`}
+                                className="min-w-0"
+                                >
+                                <AdCampaign
+                                id={`ad-sidebar-${index}`}
+                                type="sidebar-card"
+                                description={ad.description}
+                                linkUrl={ad.target_url}
+                                imageUrl={
+                                    `${import.meta.env.VITE_BACKEND_URL}/uploads/ads/${ad.image}`
+                                }
+                                title={ad.title}
+                                />
+                                </div>
+                                ))}
 
-                                        <div className="min-w-0">
-                                            <AdCampaign
-                                                id="ad-2b"
-                                                type="sidebar-card"
-                                                title="AI Writing Tools"
-                                                imageUrl="https://via.placeholder.com/150"
-                                                linkUrl="https://example.com"
-                                            />
-                                        </div>
+                                </div>
+                                </>
+                                )}
 
-                                    </div>
                                 </div>
                             </div>
 
@@ -543,38 +544,40 @@ export const ChatWidget = ({
                             {/* =========================================
                                 PUBLICITÉ BASSE
                             ========================================= */}
-                            <div
-                                className="
-                                    relative
-                                    z-20
-                                    border-t
-                                    bg-white
-                                    max-h-[90px]
-                                    sm:max-h-[110px]
-                                    overflow-hidden
-                                "
-                            >
-                                {ads.sidebar?.[0] && (
-                                    <AdCampaign
-                                        id="ad-4"
-                                        type="chat-bottom-banner"
-                                        title={
-                                            ads.sidebar[0].title
-                                        }
-                                        description={
-                                            ads.sidebar[0].description
-                                        }
-                                        imageUrl={`
-                                            ${import.meta.env.VITE_BACKEND_URL}
-                                            /uploads/ads/
-                                            ${ads.sidebar[0].image}
-                                        `.replace(/\s+/g, "")}
-                                        linkUrl={
-                                            ads.sidebar[0].target_url
-                                        }
-                                    />
-                                )}
-                            </div>
+                            {ads.bottom_sheet?.[0] && (
+                                <div
+                                    className="
+                                        relative
+                                        z-20
+                                        border-t
+                                        bg-white
+                                        max-h-[90px]
+                                        sm:max-h-[110px]
+                                        overflow-hidden
+                                    "
+                                >
+                                    {ads.sidebar?.[0] && (
+                                        <AdCampaign
+                                            id="ad-4"
+                                            type="chat-bottom-banner"
+                                            title={
+                                                ads.bottom_sheet[0].title
+                                            }
+                                            description={
+                                                ads.bottom_sheet[0].description
+                                            }
+                                            imageUrl={`
+                                                ${import.meta.env.VITE_BACKEND_URL}
+                                                /uploads/ads/
+                                                ${ads.bottom_sheet[0].image}
+                                            `.replace(/\s+/g, "")}
+                                            linkUrl={
+                                                ads.sidebar[0].target_url
+                                            }
+                                        />
+                                    )}
+                                </div>
+                            )}
 
                         </div>
                     )}

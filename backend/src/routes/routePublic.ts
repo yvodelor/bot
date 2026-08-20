@@ -18,13 +18,18 @@ routerPublic.get(
     publicBusinessController.getById
 );
 
-
+// Publicités actives
+routerPublic.get(
+    "/public/chatbots",
+    publicBusinessController.getPublicChatbot
+);
 
 // Publicités actives
 routerPublic.get(
     "/public/ad/active",
     publicAdController.getActiveAds
 );
+
 
 
 export default routerPublic;

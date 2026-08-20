@@ -23,6 +23,8 @@ import groupeRoute from './groupeRoute'
 
 import adRoute from './adRoute'
 
+import chatNoRoute from './chatNoRoute'
+
 
 
 const router = Router()
@@ -30,7 +32,7 @@ const router = Router()
 
 
 
-router.use('/ad', adRoute)
+
 
 // Route Privée
 router.use(authMiddleware)
@@ -38,7 +40,8 @@ router.use(authMiddleware)
 router.use('/intent', roleMiddleware(4), intentRoute, )
 router.use('/scenario_intent', roleMiddleware(4), scenarioIntentRoute, )
 router.use('/intent_exemple', roleMiddleware(4), intentExRoute)
-
+router.use('/ad', roleMiddleware(4), adRoute)
+router.use('/chat_unknown', roleMiddleware(4), chatNoRoute)
 
 router.use('/faq', faqRoute)
 router.use('/activite', activiteRoute)

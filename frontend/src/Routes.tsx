@@ -48,10 +48,11 @@ const Dashboard = lazy(() => import("./pages/dash/Dashboard"));
 
 
 /* Chatbot */
-
 const ChatPage = lazy(() => import("./pages/chatbot/Chat"));
+const ChatbotsPage = lazy(() => import("./pages/chatbot/"));
 
-
+/* ChatNo */
+const ChatNos = lazy(() => import("./pages/admin/chatUnknown/"));
 
 
 /* Business */
@@ -289,6 +290,12 @@ const appRoutes: AppRoute[] = [
         protected: true
     },
 
+    {
+        path: "/admin/chatnos",
+        element: <ChatNos />,
+        protected: true
+    },
+
 
     // ==================================================
     // SCENARIOS
@@ -362,6 +369,20 @@ const appRoutes: AppRoute[] = [
     },
 
 
+
+    // ==================================================
+    // CHATNO
+    // ==================================================
+
+    {
+        path: "/admin/chatnos",
+        element: <ChatNos />,
+        protected: true
+    },
+
+
+
+
     // ==================================================
     // SCENARIO INTENT
     // ==================================================
@@ -391,6 +412,11 @@ const appRoutes: AppRoute[] = [
     {
         path: "/chatbot/:slugBusiness",
         element: <ChatPage />
+    },
+
+    {
+        path: "/chatbot",
+        element: <ChatbotsPage />
     }
 
 ];

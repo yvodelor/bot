@@ -26,13 +26,21 @@ const crud = createCrudApi<Business>('/business');
 export const businessApi = {
    
   
-        ...crud,   
+     ...crud,   
 
-        getPulic:  (id: string) =>
-             axiosClient.get<Business>( `/public/business/${id}`)
-             .then (res => res.data)
-            
+     getPulic:  (id: string) =>
+          axiosClient.get<Business>( `/public/business/${id}`)
+          .then (res => res.data),
+
+          
+     // Récupérer tous les businesses publics
     
-    }
+
+     getPublicChatbot: () =>
+     axiosClient
+          .get("/public/chatbots")
+          .then((res) => res.data),
+     
+}
     
     
