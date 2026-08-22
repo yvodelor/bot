@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { type Business, businessApi } from "../../api/business.api";
 import PageMeta from "../../components/common/PageMeta";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import AppLayout from "../../layouts/AppLayout"
 
 const ChatbotsPage = () => {
   const [chatbots, setChatbots] = useState<Business[]>([]);
@@ -51,7 +52,7 @@ const ChatbotsPage = () => {
   }
 
   return (
-    <>
+    <AppLayout>
       <PageMeta
         title="Chatbots disponibles"
         description="Découvrez les chatbots disponibles sur Sickabot"
@@ -60,71 +61,12 @@ const ChatbotsPage = () => {
       {/* =========================================
           ENTÊTE
       ========================================= */}
-      <header className="border-b border-gray-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-
-          <div className="flex items-center justify-between">
-
-            {/* LOGO */}
-            <Link
-              to="/"
-              className="flex items-center gap-3"
-            >
-              <div
-                className="
-                  flex
-                  h-16
-                  w-16
-                  items-center
-                  justify-center
-                  rounded-xl
-                 
-                  text-xl
-                  shadow-sm
-                "
-              >
-                <img
-                    src="/logo.png"
-                    alt="Sickabot ai"
-                    className="h-10 w-auto"
-                />
-              </div>
-
-             
-            </Link>
-
-            {/* ACTION */}
-            <div>
-              <Link
-                to="/chatbot"
-                className="
-                  rounded-lg
-                  border
-                  border-gray-200
-                  bg-white
-                  px-4
-                  py-2
-                  text-sm
-                  font-medium
-                  text-gray-700
-                  transition
-                  hover:bg-gray-50
-                "
-              >
-                Chatbots
-              </Link>
-            </div>
-
-          </div>
-
-        </div>
-      </header>
+     
 
       {/* =========================================
           CONTENU
       ========================================= */}
-      <main className="min-h-screen bg-gray-50">
-
+    
         <PageBreadcrumb pageTitle="Chatbots disponibles" />
 
         {/* =========================================
@@ -349,8 +291,8 @@ const ChatbotsPage = () => {
           </div>
         </section>
 
-      </main>
-    </>
+      
+    </AppLayout>
   );
 };
 

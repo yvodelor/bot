@@ -30,8 +30,11 @@ const ChatPage = () => {
   return(
     <> 
       <PageMeta
-        title= {`${business.name}`}
-        description={`Thatcher avec ${business.description}`}
+        title= {`Echangez avec ${business.name}`}
+        description={
+          business.description ||
+          `Échangez avec ${business.name} grâce à son assistant conversationnel.`
+        }
       />
 
       <div className="h-screen w-screen bg-gray-50">

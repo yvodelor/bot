@@ -547,38 +547,29 @@ export const ChatWidget = ({
                             {ads.bottom_sheet?.[0] && (
                                 <div
                                     className="
-                                        relative
-                                        z-20
-                                        border-t
-                                        bg-white
-                                        max-h-[90px]
-                                        sm:max-h-[110px]
-                                        overflow-hidden
+                                    relative
+                                    z-20
+                                    border-t
+                                    bg-white
+                                    max-h-[90px]
+                                    sm:max-h-[110px]
+                                    overflow-hidden
                                     "
                                 >
-                                    {ads.bottom_sheet[0] && (
-                                        <AdCampaign
-                                            id="ad-4"
-                                            type="chat-bottom-banner"
-                                            title={
-                                                ads.bottom_sheet[0].title
-                                            }
-                                            description={
-                                                ads.bottom_sheet[0].description
-                                            }
-                                            imageUrl={`
-                                                ${import.meta.env.VITE_BACKEND_URL}
-                                                /uploads/ads/
-                                                ${ads.bottom_sheet[0].image}
-                                            `.replace(/\s+/g, "")}
-                                            linkUrl={
-                                                ads.sidebar[0].target_url
-                                            }
-                                        />
-                                    )}
+                                    <AdCampaign
+                                    id="ad-bottom"
+                                    type="chat-bottom-banner"
+                                    title={ads.bottom_sheet[0].title}
+                                    description={ads.bottom_sheet[0].description}
+                                    imageUrl={
+                                        ads.bottom_sheet[0].image
+                                        ? `${import.meta.env.VITE_BACKEND_URL}/uploads/ads/${ads.bottom_sheet[0].image}`
+                                        : undefined
+                                    }
+                                    linkUrl={ads.bottom_sheet[0].target_url}
+                                    />
                                 </div>
                             )}
-
                         </div>
                     )}
 
